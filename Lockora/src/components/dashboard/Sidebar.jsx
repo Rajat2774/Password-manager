@@ -324,7 +324,7 @@ export default function Sidebar({
         <div
           className={`px-3 text-[10px] text-[#a0a0b0] mb-1 truncate transition-all duration-200 ${collapsed ? "opacity-0 h-0 p-0 m-0" : ""}`}
         >
-          🔑 {user?.email}
+          {user?.email}
         </div>
         <SbItem
           icon={<LogoutIcon />}
