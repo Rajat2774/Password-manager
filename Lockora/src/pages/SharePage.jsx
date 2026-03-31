@@ -59,24 +59,31 @@ export default function SharePage() {
       // 1. Get the key from URL fragment
       const keyB64 = window.location.hash.slice(1);
       if (!keyB64) {
+        console.error("No key in URL fragment");
         setState("error");
         return;
       }
+
+      console.log("Loading shared data for ID:", id);
+      console.log("Key present:", !!keyB64);
 
       // 2. Fetch the document from Firestore
       const docRef = doc(db, "sharedLinks", id);
       const snap = await getDoc(docRef);
 
       if (!snap.exists()) {
+        console.error("Document does not exist:", id);
         setState("error");
         return;
       }
 
+      console.log("Document found");
       const docData = snap.data();
 
       // 3. Check expiry
       const expiry = docData.expiresAt?.toDate ? docData.expiresAt.toDate() : new Date(docData.expiresAt);
       if (expiry < new Date()) {
+        console.error("Link expired:", expiry);
         setState("expired");
         return;
       }
@@ -84,23 +91,28 @@ export default function SharePage() {
 
       // 4. Check access limit
       if (docData.maxAccess && docData.accessCount >= docData.maxAccess) {
+        console.error("Access limit exceeded:", docData.accessCount, "/", docData.maxAccess);
         setState("access_exceeded");
         return;
       }
 
       // 5. Increment access count
+      console.log("Incrementing access count");
       await updateDoc(docRef, { accessCount: increment(1) });
 
       // 6. Decrypt the data
       setState("decrypting");
+      console.log("Importing key and decrypting");
       const shareKey = await importKey(keyB64);
       const decrypted = await decryptSharedData(docData.encryptedData, shareKey);
 
       if (!decrypted) {
+        console.error("Decryption failed");
         setState("error");
         return;
       }
 
+      console.log("Share loaded successfully");
       setData(decrypted);
       setState("ready");
     } catch (e) {
