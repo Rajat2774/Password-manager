@@ -1,0 +1,18 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // Allow authenticated users to read/write their own data
+    match /users/{userId}/{document=**} {
+      allow read, write: if request.auth != null && request.auth.uid == userId;
+    }
+
+    // Allow anyone to read shared links (for accessing shared passwords)
+    match /sharedLinks/{linkId} {
+      allow read: if true;
+      // Allow creating shared links only for authenticated users
+      allow create: if request.auth != null;
+      // Deny updates and deletes for shared links
+      allow update, delete: if false;
+    }
+  }
+}

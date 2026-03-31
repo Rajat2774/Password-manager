@@ -3,17 +3,6 @@ import { useNavigate, Link } from "react-router-dom";
 import { auth, googleProvider } from "../firebase";
 import { signInWithEmailAndPassword, signInWithPopup } from "firebase/auth";
 
-const GridLines = () => (
-  <svg style={{ position: "absolute", inset: 0, width: "100%", height: "100%", opacity: 0.04, pointerEvents: "none" }} xmlns="http://www.w3.org/2000/svg">
-    <defs>
-      <pattern id="grid" width="48" height="48" patternUnits="userSpaceOnUse">
-        <path d="M 48 0 L 0 0 0 48" fill="none" stroke="#c8b8a2" strokeWidth="0.5" />
-      </pattern>
-    </defs>
-    <rect width="100%" height="100%" fill="url(#grid)" />
-  </svg>
-);
-
 const ShieldIcon = ({ size = 28 }) => (
   <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
     <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
@@ -67,7 +56,7 @@ export default function SignIn() {
     setLoading(true);
     try {
       await signInWithEmailAndPassword(auth, email, password);
-      navigate("/dashboard");
+      navigate("/unlock");
     } catch (err) {
       setError(getFriendlyError(err.code));
     } finally {
@@ -80,7 +69,7 @@ export default function SignIn() {
     setGoogleLoading(true);
     try {
       await signInWithPopup(auth, googleProvider);
-      navigate("/dashboard");
+      navigate("/unlock");
     } catch (err) {
       setError(getFriendlyError(err.code));
     } finally {
@@ -89,93 +78,109 @@ export default function SignIn() {
   };
 
   return (
-    <>
-      <style>{`
-        @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;500;600&family=DM+Mono:wght@300;400&display=swap');
-        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-        :root { --parchment: #f5f0e8; --ink: #1a1610; --ink-soft: #3d3428; --gold: #b8860b; --sepia: #8b7355; --sepia-light: #c8b8a2; --card-bg: #faf7f2; --border: #ddd5c4; --error: #8b2020; }
-        body { background: var(--parchment); font-family: 'DM Mono', monospace; }
-        .page { min-height: 100vh; display: flex; align-items: center; justify-content: center; background: var(--parchment); position: relative; overflow: hidden; padding: 24px; }
-        .ambient-1 { position: absolute; width: 600px; height: 600px; border-radius: 50%; background: radial-gradient(circle, rgba(184,134,11,0.06) 0%, transparent 70%); top: -150px; right: -100px; pointer-events: none; }
-        .ambient-2 { position: absolute; width: 500px; height: 500px; border-radius: 50%; background: radial-gradient(circle, rgba(139,115,85,0.07) 0%, transparent 70%); bottom: -100px; left: -80px; pointer-events: none; }
-        .card { width: 100%; max-width: 420px; background: var(--card-bg); border: 1px solid var(--border); border-radius: 4px; padding: 52px 44px 44px; position: relative; box-shadow: 0 1px 2px rgba(26,22,16,0.04), 0 4px 16px rgba(26,22,16,0.06); opacity: ${mounted ? 1 : 0}; transform: ${mounted ? "translateY(0)" : "translateY(16px)"}; transition: opacity 0.6s ease, transform 0.6s ease; }
-        .card::before { content: ''; position: absolute; top: 0; left: 44px; right: 44px; height: 2px; background: linear-gradient(90deg, transparent, var(--gold), transparent); }
-        .brand { display: flex; align-items: center; gap: 10px; margin-bottom: 32px; }
-        .brand-icon { color: var(--gold); }
-        .brand-text { font-family: 'Cormorant Garamond', serif; font-size: 22px; font-weight: 500; color: var(--ink); letter-spacing: 0.04em; }
-        .brand-text span { color: var(--gold); }
-        h1 { font-family: 'Cormorant Garamond', serif; font-size: 32px; font-weight: 300; color: var(--ink); margin-bottom: 6px; }
-        .subtitle { font-size: 11px; color: var(--sepia); letter-spacing: 0.08em; margin-bottom: 36px; text-transform: uppercase; }
-        .divider { display: flex; align-items: center; gap: 12px; margin-bottom: 24px; }
-        .divider-line { flex: 1; height: 1px; background: var(--border); }
-        .divider-text { font-size: 10px; color: var(--sepia-light); letter-spacing: 0.1em; text-transform: uppercase; }
-        .google-btn { width: 100%; display: flex; align-items: center; justify-content: center; gap: 10px; padding: 11px 16px; background: white; border: 1px solid var(--border); border-radius: 3px; cursor: pointer; font-family: 'DM Mono', monospace; font-size: 12px; color: var(--ink-soft); letter-spacing: 0.04em; transition: all 0.2s ease; margin-bottom: 20px; }
-        .google-btn:hover:not(:disabled) { border-color: var(--sepia-light); transform: translateY(-1px); box-shadow: 0 2px 8px rgba(26,22,16,0.06); }
-        .google-btn:disabled { opacity: 0.6; cursor: not-allowed; }
-        .field { margin-bottom: 18px; }
-        label { display: block; font-size: 10px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--sepia); margin-bottom: 7px; }
-        .input-wrap { position: relative; }
-        input[type="email"], input[type="password"], input[type="text"] { width: 100%; padding: 11px 14px; background: white; border: 1px solid var(--border); border-radius: 3px; font-family: 'DM Mono', monospace; font-size: 13px; color: var(--ink); outline: none; transition: border-color 0.2s, box-shadow 0.2s; }
-        input::placeholder { color: var(--sepia-light); }
-        input:focus { border-color: var(--gold); box-shadow: 0 0 0 3px rgba(184,134,11,0.08); }
-        .eye-btn { position: absolute; right: 12px; top: 50%; transform: translateY(-50%); background: none; border: none; cursor: pointer; color: var(--sepia-light); display: flex; align-items: center; padding: 2px; }
-        .eye-btn:hover { color: var(--sepia); }
-        .forgot { text-align: right; margin-top: 6px; }
-        .forgot a { font-size: 10px; color: var(--sepia); text-decoration: none; letter-spacing: 0.06em; border-bottom: 1px solid transparent; transition: all 0.2s; }
-        .forgot a:hover { color: var(--gold); border-color: var(--gold); }
-        .submit-btn { width: 100%; padding: 13px; background: var(--ink); color: var(--parchment); border: none; border-radius: 3px; font-family: 'DM Mono', monospace; font-size: 12px; letter-spacing: 0.12em; text-transform: uppercase; cursor: pointer; margin-top: 8px; transition: all 0.2s; }
-        .submit-btn:hover:not(:disabled) { background: var(--ink-soft); transform: translateY(-1px); box-shadow: 0 4px 16px rgba(26,22,16,0.18); }
-        .submit-btn:disabled { opacity: 0.7; cursor: not-allowed; }
-        .loader { display: inline-block; width: 14px; height: 14px; border: 1.5px solid rgba(245,240,232,0.3); border-top-color: var(--parchment); border-radius: 50%; animation: spin 0.7s linear infinite; vertical-align: middle; margin-right: 8px; }
-        @keyframes spin { to { transform: rotate(360deg); } }
-        .error-msg { margin-top: 16px; padding: 10px 14px; border-radius: 3px; font-size: 11px; letter-spacing: 0.04em; background: rgba(139,32,32,0.06); border: 1px solid rgba(139,32,32,0.2); color: var(--error); }
-        .footer { margin-top: 28px; text-align: center; font-size: 11px; color: var(--sepia-light); letter-spacing: 0.04em; }
-        .footer a { color: var(--gold); text-decoration: none; border-bottom: 1px solid transparent; transition: border-color 0.2s; }
-        .footer a:hover { border-color: var(--gold); }
-      `}</style>
-      <div className="page">
-        <GridLines />
-        <div className="ambient-1" /><div className="ambient-2" />
-        <div className="card">
-          <div className="brand">
-            <span className="brand-icon"><ShieldIcon /></span>
-            <span className="brand-text">Key<span>Vault</span></span>
-          </div>
-          <h1>Welcome back</h1>
-          <p className="subtitle">Sign in to your vault</p>
+    <div className="min-h-screen bg-[#0b0b0f] flex items-center justify-center px-3 sm:px-4 py-6 sm:py-8 relative overflow-hidden">
+      {/* Ambient Glow */}
+      <div className="absolute top-[-200px] right-[-100px] w-[500px] h-[500px] rounded-full bg-purple-600/[0.06] blur-[120px] pointer-events-none" />
+      <div className="absolute bottom-[-150px] left-[-100px] w-[400px] h-[400px] rounded-full bg-violet-500/[0.05] blur-[100px] pointer-events-none" />
 
-          <button className="google-btn" onClick={handleGoogle} disabled={googleLoading || loading}>
-            {googleLoading ? <span className="loader" style={{ borderTopColor: "#4285F4", border: "1.5px solid #ddd", borderTopWidth: "1.5px" }} /> : <GoogleIcon />}
-            {googleLoading ? "Connecting…" : "Continue with Google"}
+      {/* Grid Pattern */}
+      <div className="absolute inset-0 opacity-[0.03] pointer-events-none"
+        style={{
+          backgroundImage: "linear-gradient(rgba(255,255,255,.08) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,.08) 1px, transparent 1px)",
+          backgroundSize: "60px 60px",
+        }}
+      />
+
+      <div
+        className={`relative w-full max-w-[420px] bg-[#141418] border border-[#232329] rounded-2xl p-6 sm:p-8 md:p-11 shadow-2xl shadow-black/40 transition-all duration-700 ${mounted ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"}`}
+      >
+        {/* Accent Top Line */}
+        <div className="absolute top-0 left-10 right-10 h-[2px] bg-gradient-to-r from-transparent via-purple-500/60 to-transparent rounded-full" />
+
+        {/* Brand */}
+        <div className="flex items-center gap-2.5 mb-5 sm:mb-8">
+          <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-purple-500 to-violet-600 flex items-center justify-center text-white shadow-lg shadow-purple-500/20">
+            <ShieldIcon size={18} />
+          </div>
+          <span className="text-xl font-semibold text-white tracking-wide">Lockora</span>
+        </div>
+
+        <h1 className="text-[22px] sm:text-[28px] font-light text-white mb-1.5 tracking-tight">Welcome back</h1>
+        <p className="text-[11px] text-[#6b6b7b] uppercase tracking-[0.1em] mb-5 sm:mb-8">Sign in to your vault</p>
+
+        {/* Google Button */}
+        <button
+          onClick={handleGoogle}
+          disabled={googleLoading || loading}
+          className="w-full flex items-center justify-center gap-2.5 py-3 px-4 bg-[#1c1c22] border border-[#2a2a32] rounded-xl text-[13px] text-[#a0a0b0] tracking-wide transition-all duration-200 hover:border-[#3a3a45] hover:text-white hover:-translate-y-0.5 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:translate-y-0 mb-5 cursor-pointer"
+        >
+          {googleLoading ? <span className="w-4 h-4 border-[1.5px] border-[#333] border-t-[#4285F4] rounded-full animate-spin" /> : <GoogleIcon />}
+          {googleLoading ? "Connecting…" : "Continue with Google"}
+        </button>
+
+        {/* Divider */}
+        <div className="flex items-center gap-3 mb-6">
+          <div className="flex-1 h-px bg-[#232329]" />
+          <span className="text-[10px] text-[#4a4a55] uppercase tracking-[0.12em]">or</span>
+          <div className="flex-1 h-px bg-[#232329]" />
+        </div>
+
+        {/* Form */}
+        <form onSubmit={handleSignIn}>
+          <div className="mb-4">
+            <label className="block text-[10px] uppercase tracking-[0.12em] text-[#6b6b7b] mb-2">Email address</label>
+            <input
+              type="email"
+              placeholder="you@example.com"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              required
+              autoComplete="email"
+              className="w-full py-3 px-3.5 bg-[#0f0f14] border border-[#232329] rounded-xl text-[13px] text-white outline-none placeholder:text-[#3a3a45] transition-all duration-200 focus:border-purple-500/50 focus:shadow-[0_0_0_3px_rgba(139,92,246,0.08)]"
+            />
+          </div>
+          <div className="mb-2">
+            <label className="block text-[10px] uppercase tracking-[0.12em] text-[#6b6b7b] mb-2">Master password</label>
+            <div className="relative">
+              <input
+                type={showPass ? "text" : "password"}
+                placeholder="••••••••••••"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                required
+                autoComplete="current-password"
+                className="w-full py-3 px-3.5 pr-10 bg-[#0f0f14] border border-[#232329] rounded-xl text-[13px] text-white outline-none placeholder:text-[#3a3a45] transition-all duration-200 focus:border-purple-500/50 focus:shadow-[0_0_0_3px_rgba(139,92,246,0.08)]"
+              />
+              <button type="button" onClick={() => setShowPass(!showPass)} className="absolute right-3 top-1/2 -translate-y-1/2 text-[#4a4a55] hover:text-[#8b8b9b] transition-colors duration-200 bg-transparent border-none flex items-center p-0.5 cursor-pointer">
+                <EyeIcon open={showPass} />
+              </button>
+            </div>
+            <div className="text-right mt-1.5">
+              <a href="#" className="text-[10px] text-[#6b6b7b] hover:text-purple-400 tracking-wide transition-colors duration-200 no-underline">Forgot password?</a>
+            </div>
+          </div>
+
+          <button
+            type="submit"
+            disabled={loading || googleLoading}
+            className="w-full py-3.5 bg-gradient-to-r from-purple-600 to-violet-600 hover:from-purple-500 hover:to-violet-500 text-white border-none rounded-xl text-[12px] font-medium uppercase tracking-[0.12em] transition-all duration-300 hover:-translate-y-0.5 hover:shadow-lg hover:shadow-purple-500/20 disabled:opacity-60 disabled:cursor-not-allowed disabled:hover:translate-y-0 mt-2 cursor-pointer"
+          >
+            {loading ? <><span className="inline-block w-3.5 h-3.5 border-[1.5px] border-white/30 border-t-white rounded-full animate-spin align-middle mr-2" />Verifying…</> : "Unlock Vault →"}
           </button>
+        </form>
 
-          <div className="divider"><div className="divider-line" /><span className="divider-text">or</span><div className="divider-line" /></div>
-
-          <form onSubmit={handleSignIn}>
-            <div className="field">
-              <label>Email address</label>
-              <input type="email" placeholder="you@example.com" value={email} onChange={(e) => setEmail(e.target.value)} required autoComplete="email" />
-            </div>
-            <div className="field">
-              <label>Master password</label>
-              <div className="input-wrap">
-                <input type={showPass ? "text" : "password"} placeholder="••••••••••••" value={password} onChange={(e) => setPassword(e.target.value)} required autoComplete="current-password" style={{ paddingRight: 40 }} />
-                <button type="button" className="eye-btn" onClick={() => setShowPass(!showPass)}><EyeIcon open={showPass} /></button>
-              </div>
-              <div className="forgot"><a href="#">Forgot password?</a></div>
-            </div>
-            <button className="submit-btn" type="submit" disabled={loading || googleLoading}>
-              {loading ? <><span className="loader" />Verifying…</> : "Unlock Vault →"}
-            </button>
-          </form>
-
-          {error && <div className="error-msg">⚠ {error}</div>}
-
-          <div className="footer">
-            Don't have an account? <Link to="/signup">Create one</Link>
+        {/* Error */}
+        {error && (
+          <div className="mt-4 py-2.5 px-3.5 rounded-xl text-[11px] tracking-wide bg-red-500/[0.06] border border-red-500/20 text-red-400">
+            ⚠ {error}
           </div>
+        )}
+
+        {/* Footer */}
+        <div className="mt-7 text-center text-[11px] text-[#4a4a55] tracking-wide">
+          Don't have an account? <Link to="/signup" className="text-purple-400 hover:text-purple-300 no-underline transition-colors duration-200">Create one</Link>
         </div>
       </div>
-    </>
+    </div>
   );
 }

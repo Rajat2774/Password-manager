@@ -1,0 +1,199 @@
+// src/pages/UnlockVault.jsx
+import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import { auth, db } from "../firebase";
+import { doc, getDoc, setDoc } from "firebase/firestore";
+import { signOut } from "firebase/auth";
+import { deriveKey, encryptCanary, verifyCanary } from "../utils/crypto";
+
+const ShieldIcon = ({ size = 40 }) => (
+  <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round">
+    <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
+    <path d="M9 12l2 2 4-4" />
+  </svg>
+);
+
+const EyeIcon = ({ open }) => (
+  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+    {open
+      ? (<><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" /><circle cx="12" cy="12" r="3" /></>)
+      : (<><path d="M17.94 17.94A10.07 10.07 0 0112 20c-7 0-11-8-11-8a18.45 18.45 0 015.06-5.94" /><path d="M9.9 4.24A9.12 9.12 0 0112 4c7 0 11 8 11 8a18.5 18.5 0 01-2.16 3.19" /><line x1="1" y1="1" x2="23" y2="23" /></>)}
+  </svg>
+);
+
+export default function UnlockVault() {
+  const navigate = useNavigate();
+  const [user, setUser] = useState(null);
+  const [masterPassword, setMasterPassword] = useState("");
+  const [showPass, setShowPass] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [isNewUser, setIsNewUser] = useState(false);
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const [error, setError] = useState("");
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    const unsubscribe = auth.onAuthStateChanged(async (u) => {
+      if (!u) { navigate("/"); return; }
+      setUser(u);
+      // Check if user already has a vault canary set up
+      const snap = await getDoc(doc(db, "users", u.uid, "vault", "meta"));
+      setIsNewUser(!snap.exists());
+      setTimeout(() => setMounted(true), 50);
+    });
+    return unsubscribe;
+  }, [navigate]);
+
+  const handleUnlock = async (e) => {
+    e.preventDefault();
+    setError("");
+
+    if (isNewUser && masterPassword !== confirmPassword) {
+      setError("Passwords do not match.");
+      return;
+    }
+    if (masterPassword.length < 8) {
+      setError("Master password must be at least 8 characters.");
+      return;
+    }
+
+    setLoading(true);
+    try {
+      const cryptoKey = await deriveKey(masterPassword, user.uid);
+
+      if (isNewUser) {
+        // First time — create and store the canary
+        const canary = await encryptCanary(cryptoKey);
+        await setDoc(doc(db, "users", user.uid, "vault", "meta"), { canary });
+      } else {
+        // Returning user — verify master password against canary
+        const snap = await getDoc(doc(db, "users", user.uid, "vault", "meta"));
+        const valid = await verifyCanary(snap.data().canary, cryptoKey);
+        if (!valid) {
+          setError("Incorrect master password. Please try again.");
+          setLoading(false);
+          return;
+        }
+      }
+
+      // Store derived key in sessionStorage (cleared when tab closes)
+      // We store it as a flag — the actual key object lives in memory via navigation state
+      navigate("/dashboard", { state: { cryptoKey } });
+    } catch (err) {
+      console.error(err);
+      setError("Something went wrong. Please try again.");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleLogout = async () => {
+    await signOut(auth);
+    navigate("/");
+  };
+
+  if (!user) return null;
+
+  const inputClass = "w-full py-3 px-3.5 bg-[#0f0f14] border border-[#232329] rounded-xl text-[13px] text-white outline-none placeholder:text-[#3a3a45] transition-all duration-200 focus:border-purple-500/50 focus:shadow-[0_0_0_3px_rgba(139,92,246,0.08)]";
+
+  return (
+    <div className="min-h-screen bg-[#0b0b0f] flex flex-col items-center justify-center px-3 sm:px-4 py-6 sm:py-8 relative overflow-hidden">
+      {/* Ambient Glow */}
+      <div className="absolute top-[-200px] right-[-200px] w-[700px] h-[700px] rounded-full bg-purple-600/[0.05] blur-[150px] pointer-events-none" />
+      <div className="absolute bottom-[-150px] left-[-100px] w-[500px] h-[500px] rounded-full bg-violet-500/[0.04] blur-[120px] pointer-events-none" />
+
+      <div
+        className={`relative w-full max-w-[400px] bg-[#141418] border border-[#232329] rounded-2xl p-6 sm:p-8 md:p-11 shadow-2xl shadow-black/40 transition-all duration-700 ${mounted ? "opacity-100 translate-y-0 scale-100" : "opacity-0 translate-y-5 scale-[0.98]"}`}
+      >
+        {/* Accent Top Line */}
+        <div className="absolute top-0 left-10 right-10 h-[2px] bg-gradient-to-r from-transparent via-purple-500/60 to-transparent rounded-full" />
+
+        {/* Icon */}
+        <div className="flex justify-center mb-4 sm:mb-5 text-purple-400 opacity-85">
+          <ShieldIcon size={32} />
+        </div>
+
+        {isNewUser && (
+          <div className="text-center mb-4">
+            <span className="inline-block bg-purple-500/10 border border-purple-500/25 text-purple-400 text-[9px] uppercase tracking-[0.1em] px-2 py-0.5 rounded">First time setup</span>
+          </div>
+        )}
+
+        <h1 className="text-[22px] sm:text-[28px] font-light text-white text-center mb-2 tracking-tight">
+          {isNewUser ? "Set Master Password" : "Unlock Vault"}
+        </h1>
+
+        <div className="flex justify-center mb-5 sm:mb-8">
+          <div className="inline-flex items-center gap-1.5 bg-purple-500/[0.08] border border-purple-500/20 rounded-full py-1 px-3 text-[10px] sm:text-[11px] text-[#8b8b9b] tracking-wide max-w-full">
+            <span className="truncate">🔑 {user?.email}</span>
+          </div>
+        </div>
+
+        <form onSubmit={handleUnlock}>
+          <div className="mb-4">
+            <label className="block text-[10px] uppercase tracking-[0.12em] text-[#6b6b7b] mb-2">Master Password</label>
+            <div className="relative">
+              <input
+                type={showPass ? "text" : "password"}
+                placeholder="Enter your master password"
+                value={masterPassword}
+                onChange={(e) => setMasterPassword(e.target.value)}
+                required
+                autoFocus
+                className={`${inputClass} pr-10`}
+              />
+              <button type="button" onClick={() => setShowPass(!showPass)} className="absolute right-3 top-1/2 -translate-y-1/2 text-[#4a4a55] hover:text-[#8b8b9b] transition-colors bg-transparent border-none flex items-center p-0.5 cursor-pointer">
+                <EyeIcon open={showPass} />
+              </button>
+            </div>
+            {isNewUser && (
+              <p className="text-[10px] text-[#4a4a55] tracking-wide mt-1.5 leading-relaxed">
+                ⚠ This password encrypts all your vault data. It cannot be recovered if lost.
+              </p>
+            )}
+          </div>
+
+          {isNewUser && (
+            <div className="mb-4">
+              <label className="block text-[10px] uppercase tracking-[0.12em] text-[#6b6b7b] mb-2">Confirm Master Password</label>
+              <div className="relative">
+                <input
+                  type={showPass ? "text" : "password"}
+                  placeholder="Confirm your master password"
+                  value={confirmPassword}
+                  onChange={(e) => setConfirmPassword(e.target.value)}
+                  required
+                  className={`${inputClass} pr-10`}
+                />
+              </div>
+            </div>
+          )}
+
+          <button
+            type="submit"
+            disabled={loading}
+            className="w-full py-3.5 bg-gradient-to-r from-purple-600 to-violet-600 hover:from-purple-500 hover:to-violet-500 text-white border-none rounded-xl text-[12px] font-medium uppercase tracking-[0.12em] transition-all duration-300 hover:-translate-y-0.5 hover:shadow-lg hover:shadow-purple-500/20 disabled:opacity-60 disabled:cursor-not-allowed disabled:hover:translate-y-0 mt-2 cursor-pointer"
+          >
+            {loading
+              ? <><span className="inline-block w-3.5 h-3.5 border-[1.5px] border-white/30 border-t-white rounded-full animate-spin align-middle mr-2" />{isNewUser ? "Setting up vault…" : "Decrypting vault…"}</>
+              : isNewUser ? "Create Vault →" : "Unlock Vault →"}
+          </button>
+        </form>
+
+        {/* Error */}
+        {error && (
+          <div className="mt-4 py-2.5 px-3.5 rounded-xl text-[11px] tracking-wide bg-red-500/[0.06] border border-red-500/20 text-red-400">
+            ⚠ {error}
+          </div>
+        )}
+
+        <button
+          onClick={handleLogout}
+          className="block mx-auto mt-6 bg-transparent border-none text-[11px] text-[#4a4a55] hover:text-[#8b8b9b] underline tracking-wide transition-colors cursor-pointer"
+        >
+          Sign in with a different account
+        </button>
+      </div>
+    </div>
+  );
+}
