@@ -118,12 +118,25 @@ async function checkAndShowNewUserState() {
   try {
     const res = await msg({ type: "CHECK_VAULT_EXISTS" });
     if (res && !res.exists) {
-      // New user — show "create" label
+      // New user — show "create" label and additional fields
       const hdr = $("unlock-email");
-      if (hdr) hdr.textContent = (hdr.textContent || "") + " · First time setup";
+      if (hdr)
+        hdr.textContent = (hdr.textContent || "") + " · First time setup";
       $("btn-unlock").textContent = "Create Vault";
+      // Show confirm password and hint fields
+      $("confirm-field").classList.remove("hidden");
+      $("hint-field").classList.remove("hidden");
+      // Make confirm field required
+      $("input-unlock-confirm").required = true;
+    } else {
+      // Existing user — hide additional fields
+      $("confirm-field").classList.add("hidden");
+      $("hint-field").classList.add("hidden");
+      $("input-unlock-confirm").required = false;
     }
-  } catch { /* ignore */ }
+  } catch {
+    /* ignore */
+  }
 }
 
 // ── Load and display master password hint ──────────────────────────────────
@@ -212,12 +225,28 @@ $("form-signin").addEventListener("submit", async (e) => {
 $("form-unlock").addEventListener("submit", async (e) => {
   e.preventDefault();
   setError("unlock-err", "");
-  setLoading("btn-unlock", true, "Unlocking…");
 
   const masterPassword = $("input-unlock-master").value;
+  const confirmPassword = $("input-unlock-confirm").value;
+  const hint = $("input-unlock-hint").value;
+
+  // Check if this is a new user (confirm field is visible)
+  const isNewUser = !$("confirm-field").classList.contains("hidden");
+
+  if (isNewUser && masterPassword !== confirmPassword) {
+    setError("unlock-err", "Passwords do not match.");
+    return;
+  }
+
+  if (masterPassword.length < 8) {
+    setError("unlock-err", "Master password must be at least 8 characters.");
+    return;
+  }
+
+  setLoading("btn-unlock", true, isNewUser ? "Creating vault…" : "Unlocking…");
 
   try {
-    const res = await msg({ type: "UNLOCK", masterPassword });
+    const res = await msg({ type: "UNLOCK", masterPassword, hint, isNewUser });
     if (!res.ok) {
       unlockFailCount++;
       setError("unlock-err", res.error || "Incorrect master password.");
@@ -233,7 +262,7 @@ $("form-unlock").addEventListener("submit", async (e) => {
   } catch {
     setError("unlock-err", "Something went wrong.");
   } finally {
-    setLoading("btn-unlock", false, "Unlock");
+    setLoading("btn-unlock", false, isNewUser ? "Create Vault" : "Unlock");
   }
 });
 
@@ -242,6 +271,12 @@ $("btn-switch-account").addEventListener("click", async () => {
   await msg({ type: "SIGN_OUT" });
   unlockFailCount = 0;
   $("hint-container").classList.add("hidden");
+  // Reset new user fields
+  $("confirm-field").classList.add("hidden");
+  $("hint-field").classList.add("hidden");
+  $("input-unlock-confirm").required = false;
+  $("input-unlock-confirm").value = "";
+  $("input-unlock-hint").value = "";
   showScreen("screen-signin");
 });
 

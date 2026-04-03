@@ -142,7 +142,9 @@
         <!-- Create Account -->
         <div class="create-account">
           <span>Don't have an account?</span>
-          <a href="#" id="btn-create-account" class="create-link">Create one →</a>
+          <a href="#" id="btn-create-account" class="create-link"
+            >Create one →</a
+          >
         </div>
       </div>
 
@@ -201,11 +203,65 @@
               </button>
             </div>
           </div>
+
+          <!-- Confirm password (shown for new users) -->
+          <div class="field hidden" id="confirm-field">
+            <label>Confirm master password</label>
+            <div class="input-wrap">
+              <input
+                type="password"
+                id="input-unlock-confirm"
+                placeholder="••••••••"
+                required
+              />
+              <button
+                type="button"
+                class="eye-btn"
+                data-target="input-unlock-confirm"
+              >
+                <svg
+                  width="14"
+                  height="14"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="1.8"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  class="eye-open"
+                >
+                  <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" />
+                  <circle cx="12" cy="12" r="3" />
+                </svg>
+              </button>
+            </div>
+          </div>
+
+          <!-- Password hint (shown for new users) -->
+          <div class="field hidden" id="hint-field">
+            <label>Password hint (optional)</label>
+            <input
+              type="text"
+              id="input-unlock-hint"
+              placeholder="e.g., Favorite pet's name"
+              maxlength="100"
+            />
+          </div>
+
           <div id="unlock-err" class="error hidden"></div>
 
           <!-- Master password hint (shown after failed attempts) -->
           <div id="hint-container" class="hint-box hidden">
-            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+            <svg
+              width="13"
+              height="13"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="1.8"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
               <circle cx="12" cy="12" r="10" />
               <line x1="12" y1="16" x2="12" y2="12" />
               <line x1="12" y1="8" x2="12.01" y2="8" />

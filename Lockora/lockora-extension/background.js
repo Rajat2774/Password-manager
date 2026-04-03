@@ -17,6 +17,7 @@ import {
   doc,
   getDoc,
   addDoc,
+  setDoc,
 } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 import { firebaseConfig, GOOGLE_CLIENT_ID } from "./firebase-config.js";
 
@@ -95,6 +96,11 @@ async function decryptField(encoded, key) {
   } catch {
     return null;
   }
+}
+
+// ── Canary encryption ───────────────────────────────────────────────────────
+async function encryptCanary(key) {
+  return encryptField("keyvault-canary", key);
 }
 
 // ── Canary verification ───────────────────────────────────────────────────────
@@ -461,7 +467,7 @@ async function handleMessage(msg, sender) {
 
     // ── Unlock (re-derive key) ───────────────────────────────────────────────
     case "UNLOCK": {
-      const { masterPassword } = msg;
+      const { masterPassword, hint, isNewUser } = msg;
       const session = await chrome.storage.session.get(["uid"]);
       if (!session.uid) return { ok: false, error: "Not signed in." };
 
@@ -476,8 +482,21 @@ async function handleMessage(msg, sender) {
       }
 
       const key = await deriveKey(masterPassword, session.uid);
-      const valid = await verifyMasterPassword(session.uid, key);
-      if (!valid) return { ok: false, error: "Incorrect master password." };
+
+      if (isNewUser) {
+        // Create new vault for first-time user
+        const canary = await encryptCanary(key);
+        await setDoc(doc(db, "users", session.uid, "vault", "meta"), {
+          canary,
+          hint: hint || "",
+          createdAt: new Date(),
+        });
+      } else {
+        // Verify existing vault
+        const valid = await verifyMasterPassword(session.uid, key);
+        if (!valid) return { ok: false, error: "Incorrect master password." };
+      }
+
       cryptoKey = key;
       currentUid = session.uid;
       await chrome.storage.session.set({

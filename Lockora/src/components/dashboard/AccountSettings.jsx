@@ -8,7 +8,7 @@ import {
   GoogleAuthProvider,
   reauthenticateWithPopup,
 } from "firebase/auth";
-import { collection, getDocs, deleteDoc } from "firebase/firestore";
+import { collection, getDocs, deleteDoc, doc } from "firebase/firestore";
 import { inputCls } from "../../utils/vault";
 import { EyeIcon } from "./Icons";
 
@@ -58,10 +58,21 @@ export default function AccountSettings({ user }) {
         const cred = EmailAuthProvider.credential(user.email, deletePass);
         await reauthenticateWithCredential(user, cred);
       }
-      const snap = await getDocs(
-        collection(db, "users", user.uid, "passwords"),
-      );
-      await Promise.all(snap.docs.map((d) => deleteDoc(d.ref)));
+
+      // Delete all subcollections and their documents
+      const subcollections = ["passwords", "folders", "vault"];
+
+      for (const subcollection of subcollections) {
+        const snap = await getDocs(
+          collection(db, "users", user.uid, subcollection),
+        );
+        await Promise.all(snap.docs.map((d) => deleteDoc(d.ref)));
+      }
+
+      // Delete the main user document
+      await deleteDoc(doc(db, "users", user.uid));
+
+      // Finally delete the user from Firebase Auth
       await deleteUser(user);
       navigate("/");
     } catch (e) {
@@ -116,14 +127,16 @@ export default function AccountSettings({ user }) {
 
       {/* Delete account */}
       <div className="bg-white border border-red-200 rounded-2xl p-4 md:p-5 shadow-sm">
-        <div className="text-[14px] text-red-500 mb-1.5 font-semibold">⚠ Delete account</div>
+        <div className="text-[14px] text-red-500 mb-1.5 font-semibold">
+          ⚠ Delete account
+        </div>
 
         {step === 1 && (
           <>
             <div className="text-[12px] text-[#6b7c6b] leading-relaxed mb-5">
               This permanently deletes your account and{" "}
-              <span className="text-[#8a9a72] font-medium">all vault data</span> —
-              passwords, cards, identities, notes, and SSH keys. This action
+              <span className="text-[#8a9a72] font-medium">all vault data</span>{" "}
+              — passwords, cards, identities, notes, and SSH keys. This action
               cannot be undone.
             </div>
             <button
