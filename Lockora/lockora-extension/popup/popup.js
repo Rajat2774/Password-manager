@@ -24,6 +24,9 @@ function setLoading(btnId, loading, label = "Unlock vault") {
   btn.textContent = loading ? "Please wait…" : label;
 }
 
+// ── Track unlock failures for hint display ──────────────────────────────────
+let unlockFailCount = 0;
+
 // ── Eye toggle ────────────────────────────────────────────────────────────────
 document.querySelectorAll(".eye-btn").forEach((btn) => {
   btn.addEventListener("click", () => {
@@ -33,16 +36,25 @@ document.querySelectorAll(".eye-btn").forEach((btn) => {
 });
 
 // ── Open webapp link ───────────────────────────────────────────────────────────
-document.getElementById("open-webapp").addEventListener("click", (e) => {
+document.getElementById("open-webapp").addEventListener("click", async (e) => {
   e.preventDefault();
-  chrome.tabs.create({ url: "https://lockora-vault.vercel.app" });
+  const base = "https://lockora-vault.vercel.app";
+  // Get current session to pass uid to web app
+  const session = await msg({ type: "GET_SESSION" });
+  const uid = session.uid || "";
+  const url = uid
+    ? `${base}/unlock?from=extension&uid=${encodeURIComponent(uid)}`
+    : `${base}/unlock`;
+  chrome.tabs.create({ url });
+});
+
+// ── Create account link ──────────────────────────────────────────────────────
+document.getElementById("btn-create-account").addEventListener("click", (e) => {
+  e.preventDefault();
+  chrome.tabs.create({ url: "https://lockora-vault.vercel.app/signup" });
 });
 
 // ── Init ──────────────────────────────────────────────────────────────────────
-// FIX: Use timedOut and swRestart flags from GET_SESSION to correctly decide
-// whether to show the unlock screen. Previously, any SW restart (which wipes
-// cryptoKey from memory) would trigger the unlock screen even if the user's
-// configured inactivity period hadn't elapsed yet.
 async function init() {
   showScreen("screen-loading");
 
@@ -60,6 +72,9 @@ async function init() {
       $("unlock-email").textContent = session.email;
       $("unlock-email").dataset.reason = "google";
       showScreen("screen-unlock");
+      // Check if this user has a vault (i.e. has set a master password before)
+      checkAndShowNewUserState();
+      loadHint();
       return;
     }
 
@@ -68,15 +83,16 @@ async function init() {
       $("unlock-email").textContent = `${session.email} · Session timed out`;
       $("unlock-email").dataset.reason = "timeout";
       showScreen("screen-unlock");
+      loadHint();
       return;
     }
 
-    // FIX: SW was restarted (key lost) but timeout hasn't elapsed.
-    // Still need to re-derive the key, but show a softer unlock message.
+    // SW was restarted (key lost) but timeout hasn't elapsed.
     if (session.email && session.swRestart) {
       $("unlock-email").textContent = session.email;
       $("unlock-email").dataset.reason = "swrestart";
       showScreen("screen-unlock");
+      loadHint();
       return;
     }
 
@@ -91,12 +107,55 @@ async function init() {
     if (session.email) {
       $("unlock-email").textContent = session.email;
       showScreen("screen-unlock");
+      loadHint();
       return;
     }
 
     showScreen("screen-signin");
   } catch {
     showScreen("screen-signin");
+  }
+}
+
+// ── Check if new user (no vault/meta doc) for Google sign-in flow ──────────
+async function checkAndShowNewUserState() {
+  try {
+    const res = await msg({ type: "CHECK_VAULT_EXISTS" });
+    if (res && !res.exists) {
+      // New user — show "create" label
+      const hdr = $("unlock-email");
+      if (hdr)
+        hdr.textContent = (hdr.textContent || "") + " · First time setup";
+      $("btn-unlock").textContent = "Create Vault";
+    }
+  } catch {
+    /* ignore */
+  }
+}
+
+// ── Load and display master password hint ──────────────────────────────────
+async function loadHint() {
+  try {
+    const res = await msg({ type: "GET_HINT" });
+    if (res && res.hint) {
+      $("hint-container").dataset.hint = res.hint;
+    } else {
+      $("hint-container").dataset.hint = "";
+    }
+    // Always start with hint hidden
+    $("hint-container").classList.add("hidden");
+  } catch {
+    $("hint-container").dataset.hint = "";
+    $("hint-container").classList.add("hidden");
+  }
+}
+
+function showHintIfAvailable() {
+  const container = $("hint-container");
+  const hint = container.dataset.hint;
+  if (hint) {
+    $("hint-text").textContent = hint;
+    container.classList.remove("hidden");
   }
 }
 
@@ -115,7 +174,10 @@ $("btn-google-signin").addEventListener("click", async () => {
       setError("google-err", res.error || "Google sign-in failed.");
     } else {
       $("unlock-email").textContent = res.email;
+      unlockFailCount = 0;
       showScreen("screen-unlock");
+      checkAndShowNewUserState();
+      loadHint();
     }
   } catch (err) {
     setError(
@@ -164,8 +226,14 @@ $("form-unlock").addEventListener("submit", async (e) => {
   try {
     const res = await msg({ type: "UNLOCK", masterPassword });
     if (!res.ok) {
+      unlockFailCount++;
       setError("unlock-err", res.error || "Incorrect master password.");
+      // Show hint after 1 failed attempt
+      if (unlockFailCount >= 1) {
+        showHintIfAvailable();
+      }
     } else {
+      unlockFailCount = 0;
       showScreen("screen-vault");
       await loadVaultForCurrentTab();
     }
@@ -179,12 +247,15 @@ $("form-unlock").addEventListener("submit", async (e) => {
 // ── Switch account ────────────────────────────────────────────────────────────
 $("btn-switch-account").addEventListener("click", async () => {
   await msg({ type: "SIGN_OUT" });
+  unlockFailCount = 0;
+  $("hint-container").classList.add("hidden");
   showScreen("screen-signin");
 });
 
 // ── Sign out ──────────────────────────────────────────────────────────────────
 $("btn-signout").addEventListener("click", async () => {
   await msg({ type: "SIGN_OUT" });
+  unlockFailCount = 0;
   showScreen("screen-signin");
 });
 

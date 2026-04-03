@@ -370,6 +370,15 @@ async function handleMessage(msg, sender) {
     // ── Sign in with email + password ─────────────────────────────────────────
     case "SIGN_IN": {
       const { email, password, masterPassword } = msg;
+      // FIX: Clear any previous session first to prevent account conflicts
+      if (auth.currentUser) {
+        await signOut(auth);
+      }
+      cryptoKey = null;
+      currentUid = null;
+      await chrome.storage.session.clear();
+      stopKeepAlive();
+
       const cred = await signInWithEmailAndPassword(auth, email, password);
       const uid = cred.user.uid;
       const key = await deriveKey(masterPassword, uid);
@@ -396,6 +405,15 @@ async function handleMessage(msg, sender) {
 
     // ── Sign in with Google ───────────────────────────────────────────────────
     case "GOOGLE_SIGN_IN": {
+      // FIX: Clear any previous session first to prevent account conflicts
+      if (auth.currentUser) {
+        await signOut(auth);
+      }
+      cryptoKey = null;
+      currentUid = null;
+      await chrome.storage.session.clear();
+      stopKeepAlive();
+
       const idToken = await launchGoogleOAuth();
       const credential = GoogleAuthProvider.credential(idToken);
       const cred = await signInWithCredential(auth, credential);
@@ -455,12 +473,22 @@ async function handleMessage(msg, sender) {
       const { masterPassword } = msg;
       const session = await chrome.storage.session.get(["uid"]);
       if (!session.uid) return { ok: false, error: "Not signed in." };
+
+      // FIX: Verify the session uid matches the current Firebase auth user
+      const currentAuthUser = auth.currentUser;
+      if (!currentAuthUser || currentAuthUser.uid !== session.uid) {
+        // Stale session — force re-sign-in
+        await chrome.storage.session.clear();
+        cryptoKey = null;
+        currentUid = null;
+        return { ok: false, error: "Session expired. Please sign in again." };
+      }
+
       const key = await deriveKey(masterPassword, session.uid);
       const valid = await verifyMasterPassword(session.uid, key);
       if (!valid) return { ok: false, error: "Incorrect master password." };
       cryptoKey = key;
       currentUid = session.uid;
-      // FIX: Reset unlockedAt on every unlock (including re-unlock after SW restart)
       await chrome.storage.session.set({
         needsMasterPassword: false,
         unlockedAt: Date.now(),
@@ -573,6 +601,31 @@ async function handleMessage(msg, sender) {
       cryptoKey = null;
       currentUid = null;
       return { ok: true };
+    }
+
+    // ── Check if vault meta exists (to detect new vs returning user) ─────────
+    case "CHECK_VAULT_EXISTS": {
+      const session = await chrome.storage.session.get(["uid"]);
+      if (!session.uid) return { ok: false, exists: false };
+      try {
+        const snap = await getDoc(doc(db, "users", session.uid, "vault", "meta"));
+        return { ok: true, exists: snap.exists() };
+      } catch {
+        return { ok: false, exists: false };
+      }
+    }
+
+    // ── Get master password hint ──────────────────────────────────────────────
+    case "GET_HINT": {
+      const session = await chrome.storage.session.get(["uid"]);
+      if (!session.uid) return { ok: false, hint: null };
+      try {
+        const snap = await getDoc(doc(db, "users", session.uid, "vault", "meta"));
+        if (!snap.exists()) return { ok: true, hint: null };
+        return { ok: true, hint: snap.data().hint || null };
+      } catch {
+        return { ok: false, hint: null };
+      }
     }
 
     default:

@@ -451,3 +451,47 @@ input::placeholder {
 .webapp-link:hover {
   color: var(--primary-dark);
 }
+
+/* ── Create Account ── */
+.create-account {
+  text-align: center;
+  padding: 10px 16px 14px;
+  font-size: 11px;
+  color: var(--dim);
+}
+.create-link {
+  color: var(--primary);
+  text-decoration: none;
+  font-weight: 600;
+  margin-left: 4px;
+  transition: color 0.15s;
+}
+.create-link:hover {
+  color: var(--primary-dark);
+  text-decoration: underline;
+}
+
+/* ── Hint Box ── */
+.hint-box {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  padding: 8px 10px;
+  background: rgba(26, 107, 60, 0.05);
+  border: 1px solid rgba(26, 107, 60, 0.15);
+  border-radius: 10px;
+  color: var(--primary);
+}
+.hint-label {
+  font-size: 9px;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--dim);
+  margin-bottom: 1px;
+  font-weight: 500;
+}
+.hint-value {
+  font-size: 11px;
+  color: var(--text);
+  line-height: 1.4;
+}

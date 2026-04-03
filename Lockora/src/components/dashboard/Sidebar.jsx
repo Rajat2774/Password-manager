@@ -10,6 +10,7 @@ import {
   StarIcon,
   FolderIcon,
   FolderPlusIcon,
+  ExtensionIcon,
 } from "./Icons";
 
 // ── Reusable sidebar nav item ─────────────────────────────────────────────────
@@ -221,6 +222,16 @@ export default function Sidebar({
           active={activeNav === "tools"}
           collapsed={collapsed}
           onClick={() => setActiveNav("tools")}
+        />
+
+        {/* Extension */}
+        <SbItem
+          icon={<ExtensionIcon size={16} />}
+          label="Extension"
+          active={activeNav === "extension"}
+          collapsed={collapsed}
+          onClick={() => setActiveNav("extension")}
+          tip="Chrome Extension"
         />
 
         {/* Settings */}

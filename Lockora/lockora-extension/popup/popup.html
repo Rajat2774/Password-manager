@@ -138,6 +138,12 @@
             Unlock vault
           </button>
         </form>
+
+        <!-- Create Account -->
+        <div class="create-account">
+          <span>Don't have an account?</span>
+          <a href="#" id="btn-create-account" class="create-link">Create one →</a>
+        </div>
       </div>
 
       <!-- ── Screen: Unlock (session exists but key lost after SW restart) ── -->
@@ -196,6 +202,20 @@
             </div>
           </div>
           <div id="unlock-err" class="error hidden"></div>
+
+          <!-- Master password hint (shown after failed attempts) -->
+          <div id="hint-container" class="hint-box hidden">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="12" r="10" />
+              <line x1="12" y1="16" x2="12" y2="12" />
+              <line x1="12" y1="8" x2="12.01" y2="8" />
+            </svg>
+            <div>
+              <div class="hint-label">Your hint</div>
+              <div id="hint-text" class="hint-value"></div>
+            </div>
+          </div>
+
           <button type="submit" id="btn-unlock" class="btn-primary">
             Unlock
           </button>

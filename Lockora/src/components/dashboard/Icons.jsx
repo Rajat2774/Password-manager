@@ -239,3 +239,12 @@ export function XCircleIcon({ size = 16 }) {
     </svg>
   );
 }
+
+export function ExtensionIcon({ size = 16 }) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 24 24" fill="none"
+      stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+      <path d="M13.5 2H6a2 2 0 00-2 2v6.5a.5.5 0 00.5.5H8a2.5 2.5 0 010 5H4.5a.5.5 0 00-.5.5V20a2 2 0 002 2h3.5a.5.5 0 00.5-.5V19a2.5 2.5 0 015 0v2.5a.5.5 0 00.5.5H20a2 2 0 002-2v-5.5a.5.5 0 00-.5-.5H19a2.5 2.5 0 010-5h2.5a.5.5 0 00.5-.5V4a2 2 0 00-2-2h-4.5a.5.5 0 00-.5.5V5a2.5 2.5 0 01-5 0V2.5a.5.5 0 00-.5-.5z" />
+    </svg>
+  );
+}

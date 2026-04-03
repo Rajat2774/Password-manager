@@ -25,6 +25,7 @@ import PasswordGenerator from "../components/dashboard/PasswordGenerator";
 import AccountSettings from "../components/dashboard/AccountSettings";
 import SecuritySettings from "../components/dashboard/SecuritySettings";
 import FolderModal from "../components/dashboard/FolderModal";
+import ExtensionPage from "../components/dashboard/ExtensionPage";
 
 import {
   PlusIcon,
@@ -37,6 +38,7 @@ import {
   StarIcon,
   FolderIcon,
   TagIcon,
+  ExtensionIcon,
 } from "../components/dashboard/Icons";
 
 // ── Mobile Bottom Nav ─────────────────────────────────────────────────────────
@@ -65,6 +67,15 @@ function MobileBottomNav({
       icon: <ToolsIcon size={20} />,
       onClick: () => {
         setActiveNav("tools");
+        setShowSettings(false);
+      },
+    },
+    {
+      key: "extension",
+      label: "Extension",
+      icon: <ExtensionIcon size={20} />,
+      onClick: () => {
+        setActiveNav("extension");
         setShowSettings(false);
       },
     },
@@ -99,6 +110,7 @@ function MobileBottomNav({
   const isActive = (key) => {
     if (key === "vault") return activeNav === "vault";
     if (key === "tools") return activeNav === "tools";
+    if (key === "extension") return activeNav === "extension";
     if (key === "account")
       return activeNav === "settings" && activeSubNav === "account";
     if (key === "security")
@@ -695,6 +707,9 @@ export default function Dashboard() {
         {activeNav === "tools" && (
           <PasswordGenerator onUsePassword={handleUsePassword} />
         )}
+
+        {/* Extension */}
+        {activeNav === "extension" && <ExtensionPage />}
 
         {/* Settings */}
         {activeNav === "settings" && activeSubNav === "account" && (
