@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { auth, googleProvider } from "../firebase";
 import { createUserWithEmailAndPassword, signInWithPopup, updateProfile } from "firebase/auth";
+import logoImg from "../assets/logo.png";
 
 const ShieldIcon = ({ size = 28 }) => (
   <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
@@ -122,15 +123,12 @@ export default function SignUp() {
         <div className="absolute top-0 left-10 right-10 h-[2px] bg-gradient-to-r from-transparent via-[#1a6b3c]/40 to-transparent rounded-full" />
 
         {/* Brand */}
-        <div className="flex items-center gap-2.5 mb-5 sm:mb-7">
-          <div className="w-9 h-9 rounded-xl bg-[#1a6b3c] flex items-center justify-center text-white shadow-lg shadow-[#1a6b3c]/20">
-            <ShieldIcon size={18} />
-          </div>
-          <span className="text-xl font-bold text-[#1a1a2e] tracking-wide">Lockora</span>
+        <div className="flex items-center gap-2.5 mb-5 sm:mb-7 justify-center w-full">
+          <img src={logoImg} alt="Logo" className="h-10 w-auto object-contain" />
         </div>
 
         <h1 className="text-[22px] sm:text-[28px] font-bold text-[#1a1a2e] mb-1.5 tracking-tight">Create account</h1>
-        <p className="text-[12px] text-[#8a9a72] tracking-wide mb-5 sm:mb-7">Set up your secure vault</p>
+        <p className="text-[12px] text-[#8a9a72] tracking-wide mb-5 sm:mb-7">Your master password is set up separately after sign-up</p>
 
         {/* Google Button */}
         <button
@@ -160,7 +158,7 @@ export default function SignUp() {
             <input type="email" placeholder="you@example.com" value={email} onChange={(e) => setEmail(e.target.value)} required autoComplete="email" className={inputClass} />
           </div>
           <div className="mb-4">
-            <label className="block text-[10px] uppercase tracking-[0.12em] text-[#8a9a72] mb-2 font-medium">Master password</label>
+            <label className="block text-[10px] uppercase tracking-[0.12em] text-[#8a9a72] mb-2 font-medium">Account password</label>
             <div className="relative">
               <input
                 type={showPass ? "text" : "password"}
@@ -185,7 +183,7 @@ export default function SignUp() {
             )}
           </div>
           <div className="mb-4">
-            <label className="block text-[10px] uppercase tracking-[0.12em] text-[#8a9a72] mb-2 font-medium">Confirm password</label>
+            <label className="block text-[10px] uppercase tracking-[0.12em] text-[#8a9a72] mb-2 font-medium">Confirm account password</label>
             <div className="relative">
               <input
                 type={showConfirm ? "text" : "password"}
@@ -209,7 +207,7 @@ export default function SignUp() {
             disabled={loading || googleLoading || passwordsMismatch}
             className="w-full py-3.5 bg-[#1a6b3c] hover:bg-[#145a31] text-white border-none rounded-xl text-[12px] font-semibold uppercase tracking-[0.12em] transition-all duration-300 hover:-translate-y-0.5 hover:shadow-lg hover:shadow-[#1a6b3c]/20 disabled:opacity-60 disabled:cursor-not-allowed disabled:hover:translate-y-0 mt-1 cursor-pointer"
           >
-            {loading ? <><span className="inline-block w-3.5 h-3.5 border-[1.5px] border-white/30 border-t-white rounded-full animate-spin align-middle mr-2" />Creating vault…</> : "Create Vault →"}
+            {loading ? <><span className="inline-block w-3.5 h-3.5 border-[1.5px] border-white/30 border-t-white rounded-full animate-spin align-middle mr-2" />Creating account…</> : "Create Account →"}
           </button>
         </form>
 

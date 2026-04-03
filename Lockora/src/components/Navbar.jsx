@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { HiMenu, HiX } from "react-icons/hi";
-import { RiShieldKeyholeLine } from "react-icons/ri";
+import logoImg from "../assets/logo.png";
 
 export default function Navbar() {
   const [scrolled, setScrolled] = useState(false);
@@ -17,6 +17,7 @@ export default function Navbar() {
     { label: "Home", href: "#home" },
     { label: "Features", href: "#features" },
     { label: "Security", href: "#security" },
+    { label: "Extension", href: "#extension" },
     { label: "About", href: "#about" },
   ];
 
@@ -32,14 +33,7 @@ export default function Navbar() {
         <div className="flex items-center justify-between h-12 lg:h-14">
           {/* Logo */}
           <a href="#home" className="flex items-center gap-2.5 group">
-            <div className="relative">
-              <div className="w-9 h-9 rounded-xl bg-[#1a6b3c] flex items-center justify-center transform group-hover:scale-110 transition-transform duration-300 shadow-lg shadow-[#1a6b3c]/20">
-                <RiShieldKeyholeLine className="text-white text-lg" />
-              </div>
-            </div>
-            <span className="text-xl font-bold text-[#1a1a2e] tracking-wide">
-              Lockora
-            </span>
+            <img src={logoImg} alt="Logo" className="h-10 w-auto object-contain transition-transform duration-300 group-hover:scale-105" />
           </a>
 
           {/* Desktop Nav Links */}

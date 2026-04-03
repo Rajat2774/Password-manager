@@ -18,6 +18,7 @@ import {
   getDoc,
   addDoc,
   setDoc,
+  deleteDoc,
 } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 import { firebaseConfig, GOOGLE_CLIENT_ID } from "./firebase-config.js";
 
@@ -114,6 +115,21 @@ async function verifyMasterPassword(uid, key) {
   } catch {
     return false;
   }
+}
+
+async function deleteVaultData(uid) {
+  if (!uid) return;
+
+  const subcollections = ["passwords", "folders", "vault"];
+  for (const subcollection of subcollections) {
+    const snap = await getDocs(collection(db, "users", uid, subcollection));
+    if (snap && snap.docs.length > 0) {
+      await Promise.all(snap.docs.map((docRef) => deleteDoc(docRef.ref)));
+    }
+  }
+
+  // Remove vault meta doc in case it remains
+  await deleteDoc(doc(db, "users", uid, "vault", "meta"));
 }
 
 // ── Auto-lock timer ──────────────────────────────────────────────────────────
@@ -611,6 +627,22 @@ async function handleMessage(msg, sender) {
       cryptoKey = null;
       currentUid = null;
       return { ok: true };
+    }
+
+    // ── Reset vault (forgot master password) ─────────────────────────────────
+    case "RESET_VAULT": {
+      const session = await chrome.storage.session.get(["uid"]);
+      if (!session.uid) return { ok: false, error: "Not signed in." };
+
+      try {
+        await deleteVaultData(session.uid);
+        await chrome.storage.session.set({ needsMasterPassword: true, unlockedAt: null, timedOut: false });
+        cryptoKey = null;
+        currentUid = null;
+        return { ok: true };
+      } catch {
+        return { ok: false, error: "Failed to reset vault." };
+      }
     }
 
     // ── Check if vault meta exists (to detect new vs returning user) ─────────

@@ -11,6 +11,7 @@ import {
 import { HiArrowRight, HiChevronDown } from "react-icons/hi";
 import Navbar from "./Navbar";
 import Footer from "./Footer";
+import logoImg from "../assets/logo.png";
 
 /* ─────────── HERO ─────────── */
 function Hero() {
@@ -122,12 +123,7 @@ function DashboardPreview() {
             {/* Mock toolbar */}
             <div className="flex items-center justify-between pb-4 border-b border-[#e2e8e0] mb-5">
               <div className="flex items-center gap-3">
-                <div className="w-8 h-8 rounded-lg bg-[#1a6b3c] flex items-center justify-center">
-                  <RiShieldKeyholeLine className="text-white text-sm" />
-                </div>
-                <span className="text-[13px] text-[#1a1a2e] font-semibold">
-                  Lockora
-                </span>
+                <img src={logoImg} alt="Logo" className="h-6 w-auto object-contain" />
                 <div className="hidden sm:flex items-center gap-1 ml-4">
                   {["Overview", "Vault", "Generator", "Settings"].map(
                     (tab, i) => (
@@ -380,6 +376,123 @@ function Security() {
   );
 }
 
+/* ─────────── CHROME EXTENSION ─────────── */
+const extFeatures = [
+  {
+    emoji: "⚡",
+    title: "One-Click Autofill",
+    desc: "LOCKYT detects login forms automatically and fills your credentials instantly — no copy-pasting.",
+  },
+  {
+    emoji: "💾",
+    title: "Smart Save Prompts",
+    desc: "After you log in anywhere, LOCKYT offers to securely save your credentials to your encrypted vault.",
+  },
+  {
+    emoji: "🔒",
+    title: "Auto-Lock on Idle",
+    desc: "Your vault locks itself after inactivity, keeping credentials safe even if you walk away from your screen.",
+  },
+  {
+    emoji: "🌐",
+    title: "Works Everywhere",
+    desc: "Compatible with virtually every website — from Gmail to GitHub, banking portals to social apps.",
+  },
+];
+
+function ChromeExtension() {
+  return (
+    <section id="extension" className="relative py-20 lg:py-28">
+      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-3/4 h-px bg-gradient-to-r from-transparent via-[#1a6b3c]/15 to-transparent" />
+      {/* ambient glow */}
+      <div className="absolute left-0 top-1/2 -translate-y-1/2 w-[380px] h-[380px] bg-[#22a050]/[0.025] rounded-full blur-[140px] pointer-events-none" />
+
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="grid lg:grid-cols-2 gap-14 items-center">
+
+          {/* Left — content */}
+          <div>
+            <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#1a6b3c]/10 border border-[#1a6b3c]/20 text-[#1a6b3c] text-xs font-semibold mb-4 uppercase tracking-[0.12em]">
+              <svg width="11" height="11" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 14.5v-9l6 4.5-6 4.5z"/></svg>
+              Chrome Extension
+            </span>
+            <h2 className="text-2xl sm:text-4xl lg:text-[42px] font-bold text-[#1a1a2e] mb-4 leading-tight">
+              Your Vault,{" "}
+              <span className="bg-gradient-to-r from-[#1a6b3c] to-[#22a050] bg-clip-text text-transparent">
+                In Every Tab
+              </span>
+            </h2>
+            <p className="text-[#6b7c6b] text-base sm:text-lg mb-8 leading-relaxed">
+              The LOCKYT browser extension plugs directly into Chrome, bringing zero-knowledge autofill to every website you visit — without leaving your vault open in another tab.
+            </p>
+
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-10">
+              {extFeatures.map(({ emoji, title, desc }) => (
+                <div key={title} className="flex gap-3 p-4 rounded-2xl bg-white border border-[#e2e8e0] hover:border-[#c5cdb8] hover:shadow-md hover:shadow-[#1a6b3c]/5 transition-all duration-300">
+                  <span className="text-2xl leading-none mt-0.5 flex-shrink-0">{emoji}</span>
+                  <div>
+                    <h4 className="text-[13px] font-semibold text-[#1a1a2e] mb-1">{title}</h4>
+                    <p className="text-[12px] text-[#6b7c6b] leading-relaxed">{desc}</p>
+                  </div>
+                </div>
+              ))}
+            </div>
+
+            {/* Download button */}
+            <a
+              href="https://github.com/Rajat2774/Password-manager"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="group inline-flex items-center gap-3 px-7 py-3.5 bg-[#1a6b3c] hover:bg-[#145a31] text-white rounded-2xl font-semibold text-[14px] transition-all duration-300 hover:-translate-y-0.5 hover:shadow-xl hover:shadow-[#1a6b3c]/25"
+            >
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 14.5v-9l6 4.5-6 4.5z"/></svg>
+              <span>Get the Extension</span>
+              <HiArrowRight className="group-hover:translate-x-1 transition-transform duration-300" />
+            </a>
+            <p className="text-[11px] text-[#8a9a72] mt-3 tracking-wide">Free · Chrome · No account data shared</p>
+          </div>
+
+          {/* Right — visual mock */}
+          <div className="relative flex justify-center">
+            {/* Floating phone/popup card */}
+            <div className="relative w-72 bg-white rounded-2xl border border-[#e2e8e0] shadow-2xl shadow-[#1a6b3c]/8 overflow-hidden">
+              {/* Top bar */}
+              <div className="flex items-center justify-between px-4 py-3 bg-[#f6f8f3] border-b border-[#e2e8e0]">
+                <img src={logoImg} alt="LOCKYT" className="h-5 w-auto object-contain" />
+                <div className="flex gap-1.5">
+                  <div className="w-2.5 h-2.5 rounded-full bg-[#e2e8e0]" />
+                  <div className="w-2.5 h-2.5 rounded-full bg-[#e2e8e0]" />
+                </div>
+              </div>
+              {/* Site banner */}
+              <div className="mx-3 mt-3 mb-2 flex items-center gap-2 px-3 py-2 bg-[#f6f8f3] rounded-xl border border-[#e2e8e0] text-[11px] text-[#6b7c6b]">
+                <span className="text-base">🌐</span> github.com
+              </div>
+              {/* Credential rows */}
+              {[{site:"GitHub",user:"rajat@example.com"},{site:"Google",user:"raj.singh@gmail.com"}].map((c,i)=>(
+                <div key={i} className="flex items-center gap-3 px-4 py-3 border-b border-[#f0f2ed] last:border-0 hover:bg-[#f9faf7] transition-colors">
+                  <div className="w-8 h-8 rounded-lg bg-[#1a6b3c]/10 flex items-center justify-center text-sm flex-shrink-0">🔑</div>
+                  <div className="flex-1 min-w-0">
+                    <div className="text-[12px] font-medium text-[#1a1a2e] truncate">{c.site}</div>
+                    <div className="text-[10px] text-[#8a9a72] truncate">{c.user}</div>
+                  </div>
+                  <button className="text-[10px] font-semibold text-[#1a6b3c] bg-[#1a6b3c]/10 border border-[#1a6b3c]/20 rounded-lg px-2.5 py-1 hover:bg-[#1a6b3c]/15 transition-colors cursor-pointer">Fill</button>
+                </div>
+              ))}
+              {/* Footer */}
+              <div className="px-4 py-3 border-t border-[#e2e8e0] text-center">
+                <span className="text-[10px] text-[#1a6b3c] font-medium cursor-pointer hover:underline">Open LOCKYT vault →</span>
+              </div>
+            </div>
+            {/* Decorative glow behind the card */}
+            <div className="absolute inset-0 -z-10 bg-[#1a6b3c]/[0.03] rounded-full blur-[80px]" />
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}
+
 /* ─────────── CTA ─────────── */
 function CallToAction() {
   return (
@@ -458,6 +571,7 @@ export default function LandingPage() {
       <DashboardPreview />
       <Features />
       <Security />
+      <ChromeExtension />
       <About />
       <CallToAction />
       <Footer />

@@ -40,6 +40,7 @@ import {
   TagIcon,
   ExtensionIcon,
 } from "../components/dashboard/Icons";
+import logoImg from "../assets/logo.png";
 
 // ── Mobile Bottom Nav ─────────────────────────────────────────────────────────
 function MobileBottomNav({
@@ -525,10 +526,7 @@ export default function Dashboard() {
       >
         {/* Mobile header bar */}
         <div className="flex md:hidden items-center gap-2.5 mb-4 pb-3 border-b border-[#e2e8e0]">
-          <span className="flex-shrink-0 w-8 h-8 rounded-xl bg-[#1a6b3c] flex items-center justify-center text-white">
-            <ShieldIcon size={16} />
-          </span>
-          <span className="text-lg font-bold text-[#1a1a2e]">Lockora</span>
+          <img src={logoImg} alt="Logo" className="h-8 w-auto object-contain" />
         </div>
 
         {/* Vault */}

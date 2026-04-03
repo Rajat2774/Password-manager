@@ -2,7 +2,14 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { auth, db } from "../firebase";
-import { doc, getDoc, setDoc } from "firebase/firestore";
+import {
+  doc,
+  getDoc,
+  setDoc,
+  collection,
+  getDocs,
+  deleteDoc,
+} from "firebase/firestore";
 import { signOut } from "firebase/auth";
 import { deriveKey, encryptCanary, verifyCanary } from "../utils/crypto";
 
@@ -75,6 +82,53 @@ export default function UnlockVault() {
     });
     return unsubscribe;
   }, [navigate]);
+
+  const deleteVaultData = async (uid) => {
+    if (!uid) return;
+
+    const subcollections = ["passwords", "folders", "vault"];
+    for (const subcollection of subcollections) {
+      const snap = await getDocs(collection(db, "users", uid, subcollection));
+      if (snap && snap.docs.length > 0) {
+        await Promise.all(snap.docs.map((docRef) => deleteDoc(docRef.ref)));
+      }
+    }
+
+    // Remove the vault meta document if present
+    await deleteDoc(doc(db, "users", uid, "vault", "meta"));
+  };
+
+  const handleResetVault = async () => {
+    const confirmed = window.confirm(
+      "⚠️ Reset Vault\n\nYour master password is used to encrypt your data.\n\nIf you reset it, all your stored passwords will be permanently deleted and cannot be recovered.\n\nDo you want to continue?",
+    );
+
+    if (!confirmed) return;
+
+    setLoading(true);
+    setError("");
+
+    try {
+      if (!user?.uid) {
+        setError("Unable to reset vault. Please re-login.");
+        return;
+      }
+
+      await deleteVaultData(user.uid);
+      setIsNewUser(true);
+      setMasterPassword("");
+      setConfirmPassword("");
+      setPasswordHint("");
+      setUnlockFailures(0);
+      setSavedHint("");
+      setError("Vault reset. Please create a new master password.");
+    } catch (err) {
+      console.error(err);
+      setError("Unable to reset vault. Please try again.");
+    } finally {
+      setLoading(false);
+    }
+  };
 
   const handleUnlock = async (e) => {
     e.preventDefault();
@@ -259,6 +313,15 @@ export default function UnlockVault() {
             ⚠ {error}
           </div>
         )}
+
+        <button
+          type="button"
+          onClick={handleResetVault}
+          disabled={loading}
+          className="block mx-auto mt-3 bg-transparent border-none text-[11px] text-[#b91c1c]/70 hover:text-[#b91c1c] underline-offset-2 hover:underline tracking-wide transition-colors cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
+        >
+          Forgot master password / Reset vault
+        </button>
 
         {/* Hint */}
         {!isNewUser && unlockFailures >= 1 && savedHint && (

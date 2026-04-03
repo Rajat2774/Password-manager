@@ -1,7 +1,8 @@
 import { useState, useEffect } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { auth, googleProvider } from "../firebase";
-import { signInWithEmailAndPassword, signInWithPopup } from "firebase/auth";
+import { signInWithEmailAndPassword, signInWithPopup, sendPasswordResetEmail } from "firebase/auth";
+import logoImg from "../assets/logo.png";
 
 const ShieldIcon = ({ size = 28 }) => (
   <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
@@ -47,6 +48,8 @@ export default function SignIn() {
   const [googleLoading, setGoogleLoading] = useState(false);
   const [error, setError] = useState("");
   const [mounted, setMounted] = useState(false);
+  const [forgotLoading, setForgotLoading] = useState(false);
+  const [forgotMsg, setForgotMsg] = useState("");
 
   useEffect(() => { setTimeout(() => setMounted(true), 50); }, []);
 
@@ -61,6 +64,29 @@ export default function SignIn() {
       setError(getFriendlyError(err.code));
     } finally {
       setLoading(false);
+    }
+  };
+
+  const handleForgotPassword = async (e) => {
+    e.preventDefault();
+    setForgotMsg("");
+    const target = email.trim();
+    if (!target) {
+      setForgotMsg("error:Enter your email address above first, then click Forgot password.");
+      return;
+    }
+    setForgotLoading(true);
+    try {
+      await sendPasswordResetEmail(auth, target);
+      setForgotMsg("ok:Password reset email sent! Check your inbox.");
+    } catch (err) {
+      if (err.code === "auth/user-not-found" || err.code === "auth/invalid-email") {
+        setForgotMsg("error:No account found for that email address.");
+      } else {
+        setForgotMsg("error:Could not send reset email. Please try again.");
+      }
+    } finally {
+      setForgotLoading(false);
     }
   };
 
@@ -98,11 +124,8 @@ export default function SignIn() {
         <div className="absolute top-0 left-10 right-10 h-[2px] bg-gradient-to-r from-transparent via-[#1a6b3c]/40 to-transparent rounded-full" />
 
         {/* Brand */}
-        <div className="flex items-center gap-2.5 mb-5 sm:mb-8">
-          <div className="w-9 h-9 rounded-xl bg-[#1a6b3c] flex items-center justify-center text-white shadow-lg shadow-[#1a6b3c]/20">
-            <ShieldIcon size={18} />
-          </div>
-          <span className="text-xl font-bold text-[#1a1a2e] tracking-wide">Lockora</span>
+        <div className="flex items-center gap-2.5 mb-5 sm:mb-8 justify-center w-full">
+          <img src={logoImg} alt="Logo" className="h-10 w-auto object-contain" />
         </div>
 
         <h1 className="text-[22px] sm:text-[28px] font-bold text-[#1a1a2e] mb-1.5 tracking-tight">Welcome back</h1>
@@ -140,7 +163,7 @@ export default function SignIn() {
             />
           </div>
           <div className="mb-2">
-            <label className="block text-[10px] uppercase tracking-[0.12em] text-[#8a9a72] mb-2 font-medium">Master password</label>
+            <label className="block text-[10px] uppercase tracking-[0.12em] text-[#8a9a72] mb-2 font-medium">Account password</label>
             <div className="relative">
               <input
                 type={showPass ? "text" : "password"}
@@ -156,8 +179,24 @@ export default function SignIn() {
               </button>
             </div>
             <div className="text-right mt-1.5">
-              <a href="#" className="text-[10px] text-[#8a9a72] hover:text-[#1a6b3c] tracking-wide transition-colors duration-200 no-underline">Forgot password?</a>
+              <button
+                type="button"
+                onClick={handleForgotPassword}
+                disabled={forgotLoading}
+                className="text-[10px] text-[#8a9a72] hover:text-[#1a6b3c] tracking-wide transition-colors duration-200 bg-transparent border-none p-0 cursor-pointer underline-offset-2 hover:underline disabled:opacity-50"
+              >
+                {forgotLoading ? "Sending…" : "Forgot password?"}
+              </button>
             </div>
+            {forgotMsg && (
+              <div className={`mt-1.5 py-2 px-3 rounded-xl text-[10px] tracking-wide ${
+                forgotMsg.startsWith("ok:")
+                  ? "bg-green-50 border border-green-200 text-green-700"
+                  : "bg-red-50 border border-red-200 text-red-500"
+              }`}>
+                {forgotMsg.startsWith("ok:") ? "✓ " : "⚠ "}{forgotMsg.slice(3)}
+              </div>
+            )}
           </div>
 
           <button

@@ -215,6 +215,7 @@ $("form-signin").addEventListener("submit", async (e) => {
       await loadVaultForCurrentTab();
     }
   } catch (err) {
+    console.error(err);
     setError("signin-err", "Something went wrong. Check your connection.");
   } finally {
     setLoading("btn-signin", false, "Unlock vault");
@@ -263,6 +264,42 @@ $("form-unlock").addEventListener("submit", async (e) => {
     setError("unlock-err", "Something went wrong.");
   } finally {
     setLoading("btn-unlock", false, isNewUser ? "Create Vault" : "Unlock");
+  }
+});
+
+// ── Reset vault (forgot master password)──────────────────────────────────────
+$("btn-reset-vault").addEventListener("click", async (e) => {
+  e.preventDefault();
+  const confirmReset = window.confirm(
+    "⚠️ Reset Vault\n\nYour master password is used to encrypt your data.\n\nIf you reset it, all your stored passwords will be permanently deleted and cannot be recovered.\n\nDo you want to continue?",
+  );
+  if (!confirmReset) return;
+
+  setError("unlock-err", "");
+  setLoading("btn-unlock", true, "Resetting…");
+
+  try {
+    const res = await msg({ type: "RESET_VAULT" });
+    if (!res.ok) {
+      setError("unlock-err", res.error || "Failed to reset vault.");
+      return;
+    }
+
+    // Mark as first-time after reset
+    $("unlock-email").textContent = $("unlock-email").textContent.replace(
+      /( · .*?)?$/,
+      " · First time setup",
+    );
+    $("btn-unlock").textContent = "Create Vault";
+    $("confirm-field").classList.remove("hidden");
+    $("hint-field").classList.remove("hidden");
+    $("input-unlock-confirm").required = true;
+    setError("unlock-err", "Vault reset. Please create a new master password.");
+  } catch (e) {
+    console.error(e);
+    setError("unlock-err", "Could not reset vault. Please try again.");
+  } finally {
+    setLoading("btn-unlock", false, "Unlock");
   }
 });
 

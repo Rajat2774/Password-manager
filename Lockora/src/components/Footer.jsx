@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { RiShieldKeyholeLine } from "react-icons/ri";
+import logoImg from "../assets/logo.png";
 import { FaGithub, FaTwitter, FaLinkedin } from "react-icons/fa";
 
 export default function Footer() {
@@ -13,10 +13,7 @@ export default function Footer() {
           {/* Brand */}
           <div className="md:col-span-2">
             <div className="flex items-center gap-2.5 mb-4">
-              <div className="w-9 h-9 rounded-xl bg-[#1a6b3c] flex items-center justify-center shadow-lg shadow-[#1a6b3c]/15">
-                <RiShieldKeyholeLine className="text-white text-lg" />
-              </div>
-              <span className="text-xl font-bold text-[#1a1a2e]">Lockora</span>
+              <img src={logoImg} alt="Logo" className="h-10 w-auto object-contain" />
             </div>
             <p className="text-[#8a9a72] text-sm leading-relaxed max-w-sm">
               Your digital vault for the modern world. We use zero-knowledge
@@ -93,7 +90,7 @@ export default function Footer() {
         {/* Bottom Bar */}
         <div className="mt-12 pt-8 border-t border-[#e2e8e0] flex flex-col sm:flex-row items-center justify-between gap-4">
           <p className="text-sm text-[#8a9a72]">
-            © 2026 Lockora. All rights reserved.
+            © {new Date().getFullYear()} Lockyt. All rights reserved.
           </p>
           <p className="text-sm text-[#8a9a72]">
             Built with 🔒 for your security.

@@ -12,6 +12,8 @@ import {
   FolderPlusIcon,
   ExtensionIcon,
 } from "./Icons";
+import logoImg from "../../assets/logo.png";
+import logoCollapsedImg from "../../assets/logo-collapsed.png";
 
 // ── Reusable sidebar nav item ─────────────────────────────────────────────────
 function SbItem({
@@ -26,7 +28,7 @@ function SbItem({
   color,
 }) {
   return (
-    <div className="relative group">
+    <div className="relative group mb-1">
       {collapsed && (
         <div className="hidden group-hover:flex absolute left-[calc(60px+8px)] top-1/2 -translate-y-1/2 bg-white text-[#4a5568] text-[11px] py-1.5 px-3 rounded-xl whitespace-nowrap z-50 border border-[#e2e8e0] shadow-lg pointer-events-none">
           {tip || label}
@@ -34,9 +36,9 @@ function SbItem({
       )}
       <button
         onClick={onClick}
-        className={`flex items-center gap-2.5 w-full rounded-xl text-[12.5px] tracking-wide border-none transition-all duration-200 overflow-hidden cursor-pointer
-          ${collapsed ? "justify-center py-2.5 px-2.5" : "py-2.5 px-3 text-left"}
-          ${active ? "bg-[#1a6b3c]/10 text-[#1a6b3c] font-medium" : "bg-transparent text-[#5a6a5a] hover:bg-[#e6ebe0] hover:text-[#1a1a2e]"}`}
+        className={`flex items-center w-full rounded-xl text-[12.5px] tracking-wide border-none transition-all duration-200 overflow-hidden cursor-pointer
+          ${collapsed ? "justify-center gap-0 py-2 px-2" : "gap-2.5 py-2 px-3 text-left"}
+          ${active ? "bg-[#1a6b3c]/10 text-[#1a6b3c] font-medium scale-[0.98]" : "bg-transparent text-[#5a6a5a] hover:bg-[#e6ebe0] hover:text-[#1a1a2e]"}`}
         style={color ? { color: active ? color : undefined } : undefined}
       >
         <span
@@ -51,7 +53,7 @@ function SbItem({
           {icon}
         </span>
         <span
-          className={`flex-1 transition-opacity duration-200 truncate ${collapsed ? "opacity-0 w-0 overflow-hidden pointer-events-none" : ""}`}
+          className={`transition-opacity duration-200 truncate ${collapsed ? "opacity-0 w-0 flex-none overflow-hidden pointer-events-none" : "flex-1"}`}
         >
           {label}
         </span>
@@ -98,16 +100,15 @@ export default function Sidebar({
     >
       {/* Brand */}
       <div
-        className={`border-b border-[#e2e8e0] flex items-center gap-2.5 overflow-hidden whitespace-nowrap ${collapsed ? "justify-center px-0 py-5" : "px-4 py-5"}`}
+        className={`border-b border-[#e2e8e0] flex items-center overflow-hidden whitespace-nowrap transition-all duration-300 ${collapsed ? "justify-center px-0 py-4" : "px-4 py-4"}`}
       >
-        <span className="flex-shrink-0 w-8 h-8 rounded-xl bg-[#1a6b3c] flex items-center justify-center text-white">
-          <ShieldIcon size={16} />
-        </span>
-        <span
-          className={`text-lg font-bold text-[#1a1a2e] transition-all duration-200 overflow-hidden ${collapsed ? "opacity-0 w-0" : ""}`}
-        >
-          Lockora
-        </span>
+        {collapsed ? (
+          /* Collapsed: just the keyhole lock icon */
+          <img src={logoCollapsedImg} alt="Lockyt" className="h-8 w-auto object-contain flex-shrink-0" />
+        ) : (
+          /* Expanded: full LOCKYT logo */
+          <img src={logoImg} alt="Lockyt" className="h-8 w-auto object-contain" />
+        )}
       </div>
 
       {/* Nav */}
