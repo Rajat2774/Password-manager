@@ -370,15 +370,6 @@ async function handleMessage(msg, sender) {
     // ── Sign in with email + password ─────────────────────────────────────────
     case "SIGN_IN": {
       const { email, password, masterPassword } = msg;
-      // FIX: Clear any previous session first to prevent account conflicts
-      if (auth.currentUser) {
-        await signOut(auth);
-      }
-      cryptoKey = null;
-      currentUid = null;
-      await chrome.storage.session.clear();
-      stopKeepAlive();
-
       const cred = await signInWithEmailAndPassword(auth, email, password);
       const uid = cred.user.uid;
       const key = await deriveKey(masterPassword, uid);

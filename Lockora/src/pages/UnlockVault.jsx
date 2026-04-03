@@ -63,27 +63,6 @@ export default function UnlockVault() {
   const [savedHint, setSavedHint] = useState("");
 
   useEffect(() => {
-    // Check if coming from extension with expected uid
-    const urlParams = new URLSearchParams(window.location.search);
-    const fromExtension = urlParams.get("from") === "extension";
-    const expectedUid = urlParams.get("uid");
-
-    if (fromExtension && expectedUid) {
-      // Clean up URL
-      const url = new URL(window.location);
-      url.searchParams.delete("from");
-      url.searchParams.delete("uid");
-      window.history.replaceState({}, "", url);
-
-      // Check current user
-      const currentUser = auth.currentUser;
-      if (currentUser && currentUser.uid !== expectedUid) {
-        // Wrong user signed in, sign out
-        signOut(auth);
-        return;
-      }
-    }
-
     const unsubscribe = auth.onAuthStateChanged(async (u) => {
       if (!u) {
         navigate("/");

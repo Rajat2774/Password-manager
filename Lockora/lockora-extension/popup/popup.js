@@ -39,13 +39,9 @@ document.querySelectorAll(".eye-btn").forEach((btn) => {
 document.getElementById("open-webapp").addEventListener("click", async (e) => {
   e.preventDefault();
   const base = "https://lockora-vault.vercel.app";
-  // Get current session to pass uid to web app
-  const session = await msg({ type: "GET_SESSION" });
-  const uid = session.uid || "";
-  const url = uid
-    ? `${base}/unlock?from=extension&uid=${encodeURIComponent(uid)}`
-    : `${base}/unlock`;
-  chrome.tabs.create({ url });
+  // Always go to /unlock — the web app needs to derive its own cryptoKey
+  // (the extension's in-memory key can't be transferred to the web app)
+  chrome.tabs.create({ url: base + "/unlock" });
 });
 
 // ── Create account link ──────────────────────────────────────────────────────
@@ -124,13 +120,10 @@ async function checkAndShowNewUserState() {
     if (res && !res.exists) {
       // New user — show "create" label
       const hdr = $("unlock-email");
-      if (hdr)
-        hdr.textContent = (hdr.textContent || "") + " · First time setup";
+      if (hdr) hdr.textContent = (hdr.textContent || "") + " · First time setup";
       $("btn-unlock").textContent = "Create Vault";
     }
-  } catch {
-    /* ignore */
-  }
+  } catch { /* ignore */ }
 }
 
 // ── Load and display master password hint ──────────────────────────────────
