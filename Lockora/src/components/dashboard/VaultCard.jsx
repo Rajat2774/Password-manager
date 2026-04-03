@@ -7,7 +7,6 @@ import {
   EditIcon,
   TrashIcon,
   StarIcon,
-  ShareIcon,
   FolderIcon,
 } from "./Icons";
 
@@ -17,7 +16,7 @@ export default function VaultCard({
   onDelete,
   cryptoKey,
   onToggleFavorite,
-  onShare,
+
   folders,
 }) {
   const [revealed, setRevealed] = useState(false);
@@ -62,25 +61,25 @@ export default function VaultCard({
 
   return (
     <div
-      className={`bg-[#141418] border rounded-2xl p-3 md:p-4 transition-all duration-200 hover:shadow-lg hover:shadow-black/20 hover:-translate-y-0.5 overflow-hidden ${
+      className={`bg-white border rounded-2xl p-3.5 md:p-4.5 transition-all duration-250 hover:shadow-xl hover:shadow-[#1a6b3c]/8 hover:-translate-y-1 overflow-hidden animate-card-enter ${
         isFav
-          ? "border-amber-500/25 hover:border-amber-500/40 shadow-amber-500/5"
-          : "border-[#232329] hover:border-[#2a2a32]"
+          ? "border-amber-400/40 shadow-amber-400/5"
+          : "border-[#e2e8e0] hover:border-[#c5cdb8]"
       }`}
     >
       {/* Header row */}
-      <div className="flex items-center gap-2.5 mb-2">
+      <div className="flex items-center gap-2.5 mb-2.5">
         <div
-          className="w-8 h-8 md:w-9 md:h-9 rounded-xl flex items-center justify-center text-sm md:text-base flex-shrink-0"
+          className="w-9 h-9 md:w-10 md:h-10 rounded-xl flex items-center justify-center text-sm md:text-base flex-shrink-0"
           style={{ background: vt.color + "15", color: vt.color }}
         >
           {vt.icon}
         </div>
         <div className="flex-1 min-w-0">
-          <div className="text-[12px] md:text-[13px] text-white truncate">
+          <div className="text-[13px] md:text-[14px] font-medium text-[#1a1a2e] truncate">
             {getTitle(entry)}
           </div>
-          <div className="text-[11px] text-[#a0a0b0] mt-0.5 truncate">
+          <div className="text-[11px] text-[#6b7c6b] mt-0.5 truncate">
             {getSub(entry) || vt.label}
           </div>
         </div>
@@ -91,10 +90,10 @@ export default function VaultCard({
             e.stopPropagation();
             onToggleFavorite?.(entry.id, !isFav);
           }}
-          className={`bg-transparent border-none p-1 rounded-lg flex items-center justify-center transition-all duration-300 cursor-pointer hover:scale-110 ${
+          className={`bg-transparent border-none p-1.5 rounded-lg flex items-center justify-center transition-all duration-300 cursor-pointer hover:scale-110 ${
             isFav
-              ? "text-amber-400 hover:text-amber-300 star-pulse"
-              : "text-[#4a4a55] hover:text-[#a0a0b0]"
+              ? "text-amber-500 hover:text-amber-400 star-pulse"
+              : "text-[#c5cdb8] hover:text-[#8a9a72]"
           }`}
           title={isFav ? "Remove from favorites" : "Add to favorites"}
         >
@@ -102,7 +101,7 @@ export default function VaultCard({
         </button>
 
         <span
-          className="text-[8px] md:text-[9px] uppercase tracking-[0.08em] py-0.5 px-1.5 md:px-2 rounded whitespace-nowrap flex-shrink-0 hidden sm:inline"
+          className="text-[8px] md:text-[9px] uppercase tracking-[0.08em] py-0.5 px-2 md:px-2.5 rounded-full whitespace-nowrap flex-shrink-0 hidden sm:inline font-medium"
           style={{ background: vt.color + "12", color: vt.color }}
         >
           {vt.label}
@@ -114,7 +113,7 @@ export default function VaultCard({
         <div className="flex items-center gap-1.5 mb-2.5 flex-wrap">
           {folder && (
             <span
-              className="flex items-center gap-1 text-[10px] py-0.5 px-2 rounded-md"
+              className="flex items-center gap-1 text-[10px] py-0.5 px-2 rounded-full font-medium"
               style={{ background: folder.color + "12", color: folder.color }}
             >
               <FolderIcon size={10} />
@@ -124,7 +123,7 @@ export default function VaultCard({
           {entry.tags?.map((tag) => (
             <span
               key={tag}
-              className="text-[10px] py-0.5 px-2 rounded-md bg-[#1a1a25] text-[#a0a0b0] border border-[#232329]"
+              className="text-[10px] py-0.5 px-2 rounded-full bg-[#f2f5ed] text-[#5a6a5a] border border-[#e2e8e0]"
             >
               #{tag}
             </span>
@@ -133,8 +132,8 @@ export default function VaultCard({
       )}
 
       {/* Secret row */}
-      <div className="flex items-center justify-between bg-[#0f0f14] border border-[#1e1e25] rounded-xl py-2 px-2.5 md:px-3 gap-1">
-        <span className="text-[11px] md:text-[12px] text-[#a0a0b0] tracking-wide flex-1 truncate min-w-0">
+      <div className="flex items-center justify-between bg-[#f6f8f3] border border-[#e2e8e0] rounded-xl py-2 px-3 md:px-3.5 gap-1">
+        <span className="text-[11px] md:text-[12px] text-[#6b7c6b] tracking-wide flex-1 truncate min-w-0 font-mono">
           {revealed && secret
             ? entry.vaultType === "ssh"
               ? "••• private key stored •••"
@@ -143,38 +142,32 @@ export default function VaultCard({
         </span>
         <div className="flex gap-0.5 flex-shrink-0">
           <button
-            className="bg-transparent border-none p-1 md:p-1.5 rounded-lg text-[#a0a0b0] hover:bg-[#1e1e25] hover:text-white flex items-center justify-center transition-all cursor-pointer"
+            className="bg-transparent border-none p-1.5 md:p-2 rounded-lg text-[#8a9a72] hover:bg-[#e6ebe0] hover:text-[#1a6b3c] flex items-center justify-center transition-all cursor-pointer"
             onClick={reveal}
           >
             <EyeIcon open={revealed} />
           </button>
           {revealed && secret && entry.vaultType !== "note" && (
             <button
-              className="bg-transparent border-none p-1 md:p-1.5 rounded-lg text-[#a0a0b0] hover:bg-[#1e1e25] hover:text-white flex items-center justify-center transition-all cursor-pointer"
+              className="bg-transparent border-none p-1.5 md:p-2 rounded-lg text-[#8a9a72] hover:bg-[#e6ebe0] hover:text-[#1a6b3c] flex items-center justify-center transition-all cursor-pointer"
               onClick={() => copy(secret, "s")}
             >
               {copied === "s" ? (
-                <span className="text-[12px] text-emerald-400">✓</span>
+                <span className="text-[12px] text-emerald-500">✓</span>
               ) : (
                 <CopyIcon />
               )}
             </button>
           )}
+
           <button
-            className="bg-transparent border-none p-1 md:p-1.5 rounded-lg text-[#a0a0b0] hover:bg-purple-500/10 hover:text-purple-400 flex items-center justify-center transition-all cursor-pointer"
-            onClick={() => onShare?.(entry)}
-            title="Share securely"
-          >
-            <ShareIcon size={14} />
-          </button>
-          <button
-            className="bg-transparent border-none p-1 md:p-1.5 rounded-lg text-[#a0a0b0] hover:bg-[#1e1e25] hover:text-white flex items-center justify-center transition-all cursor-pointer"
+            className="bg-transparent border-none p-1.5 md:p-2 rounded-lg text-[#8a9a72] hover:bg-[#e6ebe0] hover:text-[#1a6b3c] flex items-center justify-center transition-all cursor-pointer"
             onClick={() => onEdit(entry)}
           >
             <EditIcon />
           </button>
           <button
-            className="bg-transparent border-none p-1 md:p-1.5 rounded-lg text-[#a0a0b0] hover:bg-red-500/10 hover:text-red-400 flex items-center justify-center transition-all cursor-pointer"
+            className="bg-transparent border-none p-1.5 md:p-2 rounded-lg text-[#8a9a72] hover:bg-red-50 hover:text-red-500 flex items-center justify-center transition-all cursor-pointer"
             onClick={() => onDelete(entry.id)}
           >
             <TrashIcon />

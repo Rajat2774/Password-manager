@@ -25,7 +25,7 @@ import PasswordGenerator from "../components/dashboard/PasswordGenerator";
 import AccountSettings from "../components/dashboard/AccountSettings";
 import SecuritySettings from "../components/dashboard/SecuritySettings";
 import FolderModal from "../components/dashboard/FolderModal";
-import ShareModal from "../components/dashboard/ShareModal";
+
 import {
   PlusIcon,
   SearchIcon,
@@ -107,14 +107,14 @@ function MobileBottomNav({
   };
 
   return (
-    <nav className="md:hidden fixed bottom-0 left-0 right-0 z-30 bg-[#111116]/95 backdrop-blur-xl border-t border-[#1e1e25]">
+    <nav className="md:hidden fixed bottom-0 left-0 right-0 z-30 bg-white/90 backdrop-blur-xl border-t border-[#e2e8e0] shadow-[0_-4px_20px_rgba(0,0,0,0.04)]">
       <div className="flex items-center justify-around px-1 py-1.5 safe-bottom">
         {items.map(({ key, label, icon, onClick }) => (
           <button
             key={key}
             onClick={onClick}
             className={`flex flex-col items-center gap-0.5 py-2 px-3 rounded-xl border-none transition-all duration-200 cursor-pointer min-w-0 flex-1
-              ${isActive(key) ? "text-purple-400 bg-purple-500/10" : key === "logout" ? "text-red-400/60" : "text-[#a0a0b0] bg-transparent"}`}
+              ${isActive(key) ? "text-[#1a6b3c] bg-[#1a6b3c]/8" : key === "logout" ? "text-red-400/60" : "text-[#8a9a72] bg-transparent"}`}
           >
             {icon}
             <span className="text-[9px] tracking-wide truncate">{label}</span>
@@ -144,10 +144,10 @@ function MobileFilterBar({
           setActiveFolder("");
           setActiveTag("");
         }}
-        className={`flex items-center gap-1 py-1.5 px-3 rounded-lg border text-[11px] transition-all cursor-pointer flex-shrink-0 ${
+        className={`flex items-center gap-1 py-1.5 px-3 rounded-full border text-[11px] transition-all cursor-pointer flex-shrink-0 ${
           showFavoritesOnly
-            ? "bg-amber-500/15 border-amber-500/30 text-amber-300"
-            : "bg-[#141418] border-[#232329] text-[#a0a0b0]"
+            ? "bg-amber-50 border-amber-300/40 text-amber-600"
+            : "bg-white border-[#e2e8e0] text-[#6b7c6b]"
         }`}
       >
         <StarIcon size={12} filled={showFavoritesOnly} /> Favorites
@@ -160,10 +160,10 @@ function MobileFilterBar({
             setShowFavoritesOnly(false);
             setActiveTag("");
           }}
-          className={`flex items-center gap-1 py-1.5 px-3 rounded-lg border text-[11px] transition-all cursor-pointer flex-shrink-0 ${
+          className={`flex items-center gap-1 py-1.5 px-3 rounded-full border text-[11px] transition-all cursor-pointer flex-shrink-0 ${
             activeFolder === f.id
-              ? "bg-purple-500/15 border-purple-500/30 text-purple-300"
-              : "bg-[#141418] border-[#232329] text-[#a0a0b0]"
+              ? "bg-[#1a6b3c]/8 border-[#1a6b3c]/25 text-[#1a6b3c]"
+              : "bg-white border-[#e2e8e0] text-[#6b7c6b]"
           }`}
         >
           <span style={{ color: f.color }}>
@@ -180,10 +180,10 @@ function MobileFilterBar({
             setShowFavoritesOnly(false);
             setActiveFolder("");
           }}
-          className={`py-1.5 px-3 rounded-lg border text-[11px] transition-all cursor-pointer flex-shrink-0 ${
+          className={`py-1.5 px-3 rounded-full border text-[11px] transition-all cursor-pointer flex-shrink-0 ${
             activeTag === tag
-              ? "bg-purple-500/15 border-purple-500/30 text-purple-300"
-              : "bg-[#141418] border-[#232329] text-[#a0a0b0]"
+              ? "bg-[#1a6b3c]/8 border-[#1a6b3c]/25 text-[#1a6b3c]"
+              : "bg-white border-[#e2e8e0] text-[#6b7c6b]"
           }`}
         >
           #{tag}
@@ -225,7 +225,7 @@ export default function Dashboard() {
   const [activeFolder, setActiveFolder] = useState("");
   const [activeTag, setActiveTag] = useState("");
   const [folderModal, setFolderModal] = useState(null); // null | "new" | folder object
-  const [shareModal, setShareModal] = useState(null); // null | entry
+
 
   // ── Responsive breakpoint listener ────────────────────────────────────────
   useEffect(() => {
@@ -442,7 +442,7 @@ export default function Dashboard() {
     ]),
   );
 
-  const sidebarW = collapsed ? 60 : 240;
+  const sidebarW = collapsed ? 60 : 250;
 
   const handleUsePassword = (pw) => {
     setPrefillPassword(pw);
@@ -466,7 +466,7 @@ export default function Dashboard() {
   // ── Render ────────────────────────────────────────────────────────────────
   return (
     <div
-      className={`flex min-h-screen bg-[#0b0b0f] transition-opacity duration-400 ${mounted ? "opacity-100" : "opacity-0"}`}
+      className={`flex min-h-screen bg-[#eef1e8] transition-opacity duration-400 ${mounted ? "opacity-100" : "opacity-0"}`}
       style={{ fontFamily: "'Inter', sans-serif" }}
     >
       {/* ── Desktop Sidebar (hidden on mobile) ── */}
@@ -500,8 +500,8 @@ export default function Dashboard() {
       {/* Desktop collapse toggle (hidden on mobile) */}
       <button
         onClick={() => setCollapsed((c) => !c)}
-        className="hidden md:flex fixed z-30 w-6 h-6 rounded-full bg-[#141418] border border-[#232329] items-center justify-center text-[10px] text-[#a0a0b0] hover:text-white hover:border-[#3a3a45] shadow-lg transition-all duration-300 cursor-pointer"
-        style={{ top: 19, left: sidebarW - 12 }}
+        className="hidden md:flex fixed z-30 w-7 h-7 rounded-full bg-white border border-[#e2e8e0] items-center justify-center text-[10px] text-[#8a9a72] hover:text-[#1a6b3c] hover:border-[#1a6b3c]/30 shadow-sm transition-all duration-300 cursor-pointer"
+        style={{ top: 19, left: sidebarW - 14 }}
       >
         {collapsed ? "▶" : "◀"}
       </button>
@@ -512,21 +512,25 @@ export default function Dashboard() {
         style={{ marginLeft: isMobile ? 0 : sidebarW }}
       >
         {/* Mobile header bar */}
-        <div className="flex md:hidden items-center gap-2.5 mb-4 pb-3 border-b border-[#1e1e25]">
-          <span className="flex-shrink-0 text-purple-400">
-            <ShieldIcon size={22} />
+        <div className="flex md:hidden items-center gap-2.5 mb-4 pb-3 border-b border-[#e2e8e0]">
+          <span className="flex-shrink-0 w-8 h-8 rounded-xl bg-[#1a6b3c] flex items-center justify-center text-white">
+            <ShieldIcon size={16} />
           </span>
-          <span className="text-lg font-semibold text-white">Lockora</span>
+          <span className="text-lg font-bold text-[#1a1a2e]">Lockora</span>
         </div>
 
         {/* Vault */}
         {activeNav === "vault" && (
           <>
+            {/* Header */}
             <div className="flex flex-col sm:flex-row sm:items-center justify-between mb-4 md:mb-6 gap-3">
               <div>
-                <div className="text-[20px] md:text-[26px] font-semibold text-white">
+                <div className="text-[22px] md:text-[28px] font-bold text-[#1a1a2e]">
                   {activeFilterLabel || "Your Vault"}
                 </div>
+                <p className="text-[13px] text-[#6b7c6b] mt-0.5">
+                  Plan, organize, and secure your credentials with ease.
+                </p>
                 {activeFilterLabel && (
                   <button
                     onClick={() => {
@@ -534,7 +538,7 @@ export default function Dashboard() {
                       setActiveFolder("");
                       setActiveTag("");
                     }}
-                    className="text-[11px] text-[#a0a0b0] hover:text-purple-300 bg-transparent border-none cursor-pointer mt-0.5 p-0 transition-colors"
+                    className="text-[11px] text-[#8a9a72] hover:text-[#1a6b3c] bg-transparent border-none cursor-pointer mt-1 p-0 transition-colors"
                   >
                     ← Back to all items
                   </button>
@@ -545,41 +549,42 @@ export default function Dashboard() {
                   setPrefillPassword("");
                   setModal("new");
                 }}
-                className="flex items-center justify-center gap-1.5 py-2.5 px-5 bg-gradient-to-r from-purple-600 to-violet-600 hover:from-purple-500 hover:to-violet-500 text-white border-none rounded-xl text-[12px] sm:text-[11px] uppercase tracking-[0.1em] transition-all duration-300 hover:-translate-y-0.5 hover:shadow-lg hover:shadow-purple-500/20 cursor-pointer w-full sm:w-auto"
+                className="flex items-center justify-center gap-2 py-2.5 px-5 bg-[#1a6b3c] hover:bg-[#145a31] text-white border-none rounded-xl text-[12px] sm:text-[12px] font-medium tracking-wide transition-all duration-300 hover:-translate-y-0.5 hover:shadow-lg hover:shadow-[#1a6b3c]/20 cursor-pointer w-full sm:w-auto"
               >
                 <PlusIcon /> Add item
               </button>
             </div>
 
             {/* Stats — scrollable on mobile */}
-            <div className="flex gap-2 md:gap-3 mb-4 md:mb-6 flex-wrap">
-              <div className="bg-[#141418] border border-[#232329] rounded-2xl py-2.5 px-3.5 md:py-3 md:px-5 flex-shrink-0 min-w-[80px]">
-                <div className="text-[16px] md:text-[24px] font-semibold text-white leading-none">
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 md:gap-4 mb-5 md:mb-6">
+              <div className="bg-[#1a6b3c] rounded-2xl py-3.5 px-4 md:py-4 md:px-5 text-white relative overflow-hidden">
+                <div className="absolute top-0 right-0 w-16 h-16 bg-white/10 rounded-full -translate-y-4 translate-x-4" />
+                <div className="text-[22px] md:text-[28px] font-bold leading-none relative z-10">
                   {entries.length}
                 </div>
-                <div className="text-[9px] md:text-[10px] text-[#a0a0b0] uppercase tracking-[0.08em] mt-1 whitespace-nowrap">
+                <div className="text-[10px] md:text-[11px] text-white/70 uppercase tracking-[0.08em] mt-1.5">
                   Total items
                 </div>
               </div>
-              <div className="bg-[#141418] border border-amber-500/15 rounded-2xl py-2.5 px-3.5 md:py-3 md:px-5 flex-shrink-0 min-w-[80px]">
-                <div className="text-[16px] md:text-[24px] font-semibold text-amber-300 leading-none">
+              <div className="bg-white border border-[#e2e8e0] rounded-2xl py-3.5 px-4 md:py-4 md:px-5">
+                <div className="text-[22px] md:text-[28px] font-bold text-amber-500 leading-none">
                   {favCount}
                 </div>
-                <div className="text-[9px] md:text-[10px] text-[#a0a0b0] uppercase tracking-[0.08em] mt-1 whitespace-nowrap">
+                <div className="text-[10px] md:text-[11px] text-[#8a9a72] uppercase tracking-[0.08em] mt-1.5">
                   Favorites
                 </div>
               </div>
-              {Object.entries(VAULT_TYPES).map(
+              {Object.entries(VAULT_TYPES).slice(0, 2).map(
                 ([k, v]) =>
                   counts[k] > 0 && (
                     <div
-                      className="bg-[#141418] border border-[#232329] rounded-2xl py-2.5 px-3.5 md:py-3 md:px-5 flex-shrink-0 min-w-[80px]"
+                      className="bg-white border border-[#e2e8e0] rounded-2xl py-3.5 px-4 md:py-4 md:px-5"
                       key={k}
                     >
-                      <div className="text-[16px] md:text-[24px] font-semibold text-white leading-none">
+                      <div className="text-[22px] md:text-[28px] font-bold text-[#1a1a2e] leading-none">
                         {counts[k]}
                       </div>
-                      <div className="text-[9px] md:text-[10px] text-[#a0a0b0] uppercase tracking-[0.08em] mt-1 whitespace-nowrap">
+                      <div className="text-[10px] md:text-[11px] text-[#8a9a72] uppercase tracking-[0.08em] mt-1.5 whitespace-nowrap">
                         {v.label}s
                       </div>
                     </div>
@@ -600,7 +605,7 @@ export default function Dashboard() {
             />
 
             {/* Type filter pills — scrollable on mobile */}
-            <div className="flex gap-1.5 md:gap-2 mb-4 md:mb-5 flex-wrap">
+            <div className="flex gap-2 md:gap-2.5 mb-4 md:mb-5 flex-wrap">
               {[
                 ["all", "All", filtered.length],
                 ...Object.entries(VAULT_TYPES).map(([k, v]) => [
@@ -612,11 +617,11 @@ export default function Dashboard() {
                 <button
                   key={k}
                   onClick={() => setActiveType(k)}
-                  className={`flex items-center gap-1.5 py-1.5 px-3 md:px-3.5 rounded-full border text-[11px] transition-all duration-200 cursor-pointer flex-shrink-0 whitespace-nowrap ${activeType === k ? "bg-purple-500/15 border-purple-500/30 text-purple-300" : "bg-[#141418] border-[#232329] text-[#a0a0b0] hover:border-[#3a3a45] hover:text-white"}`}
+                  className={`flex items-center gap-1.5 py-2 px-4 md:px-4.5 rounded-full border text-[12px] font-medium transition-all duration-200 cursor-pointer flex-shrink-0 whitespace-nowrap ${activeType === k ? "bg-[#1a6b3c] border-[#1a6b3c] text-white shadow-md shadow-[#1a6b3c]/15" : "bg-white border-[#e2e8e0] text-[#5a6a5a] hover:border-[#c5cdb8] hover:text-[#1a1a2e]"}`}
                 >
                   {label}{" "}
                   <span
-                    className={`text-[10px] rounded-full py-px px-1.5 ${activeType === k ? "bg-purple-500/20 text-purple-200" : "bg-[#1a1a20] text-[#a0a0b0]"}`}
+                    className={`text-[10px] rounded-full py-px px-1.5 ${activeType === k ? "bg-white/20 text-white" : "bg-[#f2f5ed] text-[#8a9a72]"}`}
                   >
                     {count}
                   </span>
@@ -626,39 +631,40 @@ export default function Dashboard() {
 
             {/* Search */}
             <div className="relative mb-5 md:mb-6">
-              <span className="absolute left-3.5 top-1/2 -translate-y-1/2 text-[#a0a0b0] pointer-events-none">
+              <span className="absolute left-4 top-1/2 -translate-y-1/2 text-[#8a9a72] pointer-events-none">
                 <SearchIcon />
               </span>
               <input
                 placeholder="Search your vault…"
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
-                className="w-full py-2.5 md:py-3 pl-10 pr-4 bg-[#141418] border border-[#232329] rounded-xl text-[12px] text-white outline-none placeholder:text-[#a0a0b0] transition-all duration-200 focus:border-purple-500/50 focus:shadow-[0_0_0_3px_rgba(139,92,246,0.08)]"
+                className="w-full py-3 md:py-3.5 pl-11 pr-4 bg-white border border-[#e2e8e0] rounded-2xl text-[13px] text-[#1a1a2e] outline-none placeholder:text-[#a0a8b0] transition-all duration-200 focus:border-[#1a6b3c] focus:shadow-[0_0_0_3px_rgba(26,107,60,0.08)]"
               />
             </div>
 
             {/* Vault grid */}
             {loading ? (
-              <div className="text-center py-16 text-[12px] text-[#a0a0b0] tracking-wide">
+              <div className="text-center py-16 text-[13px] text-[#8a9a72] tracking-wide">
+                <div className="w-8 h-8 border-3 border-[#e2e8e0] border-t-[#1a6b3c] rounded-full animate-spin mx-auto mb-3" />
                 Loading vault…
               </div>
             ) : filtered.length === 0 ? (
               <div className="text-center py-16 md:py-20">
-                <div className="text-[28px] md:text-[44px] mb-3.5 opacity-35">
+                <div className="text-[36px] md:text-[48px] mb-3.5 opacity-40">
                   {entries.length === 0
                     ? "🔐"
                     : showFavoritesOnly
                       ? "⭐"
                       : "🔍"}
                 </div>
-                <div className="text-xs md:text-xl font-semibold text-white mb-1.5">
+                <div className="text-sm md:text-xl font-semibold text-[#1a1a2e] mb-1.5">
                   {entries.length === 0
                     ? "Your vault is empty"
                     : showFavoritesOnly
                       ? "No favorites yet"
                       : "No results"}
                 </div>
-                <div className="text-[11px] text-[#a0a0b0]">
+                <div className="text-[12px] text-[#8a9a72]">
                   {entries.length === 0
                     ? "Add your first item to get started"
                     : showFavoritesOnly
@@ -667,7 +673,7 @@ export default function Dashboard() {
                 </div>
               </div>
             ) : (
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-[repeat(auto-fill,minmax(290px,1fr))] gap-2.5 md:gap-3.5">
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-[repeat(auto-fill,minmax(300px,1fr))] gap-3 md:gap-4">
                 {filtered.map((e) => (
                   <VaultCard
                     key={e.id}
@@ -676,7 +682,7 @@ export default function Dashboard() {
                     onEdit={setModal}
                     onDelete={handleDelete}
                     onToggleFavorite={handleToggleFavorite}
-                    onShare={setShareModal}
+
                     folders={folders}
                   />
                 ))}
@@ -738,14 +744,7 @@ export default function Dashboard() {
         />
       )}
 
-      {/* Share Modal */}
-      {shareModal && (
-        <ShareModal
-          entry={shareModal}
-          cryptoKey={cryptoKey}
-          onClose={() => setShareModal(null)}
-        />
-      )}
+
     </div>
   );
 }

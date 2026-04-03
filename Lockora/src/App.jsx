@@ -4,7 +4,6 @@ import SignIn from "./pages/sign_in";
 import SignUp from "./pages/sign_up";
 import UnlockVault from "./pages/UnlockVault";
 import Dashboard from "./pages/Dashboard";
-import SharePage from "./pages/SharePage";
 
 export default function App() {
   return (
@@ -15,7 +14,6 @@ export default function App() {
         <Route path="/signup"    element={<SignUp />} />
         <Route path="/unlock"    element={<UnlockVault />} />
         <Route path="/dashboard" element={<Dashboard />} />
-        <Route path="/share/:id" element={<SharePage />} />
       </Routes>
     </BrowserRouter>
   );

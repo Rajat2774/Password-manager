@@ -10,7 +10,6 @@ import {
   StarIcon,
   FolderIcon,
   FolderPlusIcon,
-  TagIcon,
 } from "./Icons";
 
 // ── Reusable sidebar nav item ─────────────────────────────────────────────────
@@ -28,15 +27,15 @@ function SbItem({
   return (
     <div className="relative group">
       {collapsed && (
-        <div className="hidden group-hover:flex absolute left-[calc(60px+8px)] top-1/2 -translate-y-1/2 bg-[#141418] text-[#a0a0b0] text-[11px] py-1 px-2.5 rounded-lg whitespace-nowrap z-50 border border-[#232329] shadow-lg pointer-events-none">
+        <div className="hidden group-hover:flex absolute left-[calc(60px+8px)] top-1/2 -translate-y-1/2 bg-white text-[#4a5568] text-[11px] py-1.5 px-3 rounded-xl whitespace-nowrap z-50 border border-[#e2e8e0] shadow-lg pointer-events-none">
           {tip || label}
         </div>
       )}
       <button
         onClick={onClick}
-        className={`flex items-center gap-2.5 w-full rounded-xl text-[12px] tracking-wide border-none transition-all duration-200 overflow-hidden cursor-pointer
+        className={`flex items-center gap-2.5 w-full rounded-xl text-[12.5px] tracking-wide border-none transition-all duration-200 overflow-hidden cursor-pointer
           ${collapsed ? "justify-center py-2.5 px-2.5" : "py-2.5 px-3 text-left"}
-          ${active ? "bg-purple-500/10 text-purple-300" : "bg-transparent text-[#a0a0b0] hover:bg-[#1a1a20] hover:text-white"}`}
+          ${active ? "bg-[#1a6b3c]/10 text-[#1a6b3c] font-medium" : "bg-transparent text-[#5a6a5a] hover:bg-[#e6ebe0] hover:text-[#1a1a2e]"}`}
         style={color ? { color: active ? color : undefined } : undefined}
       >
         <span
@@ -56,7 +55,7 @@ function SbItem({
           {label}
         </span>
         {!collapsed && count !== undefined && (
-          <span className="text-[10px] text-[#a0a0b0] ml-auto flex-shrink-0">
+          <span className="text-[10px] text-[#8a9a72] bg-[#e6ebe0] rounded-full py-0.5 px-2 ml-auto flex-shrink-0">
             {count}
           </span>
         )}
@@ -81,58 +80,54 @@ export default function Sidebar({
   // New props for enhanced features
   favCount = 0,
   folders = [],
-  allTags = [],
   activeFolder,
   setActiveFolder,
-  activeTag,
-  setActiveTag,
   showFavoritesOnly,
   setShowFavoritesOnly,
   onNewFolder,
   onEditFolder,
-  tagCounts = {},
   folderCounts = {},
 }) {
   const [foldersOpen, setFoldersOpen] = useState(true);
-  const [tagsOpen, setTagsOpen] = useState(false);
 
   return (
     <aside
-      className="hidden md:flex fixed top-0 left-0 z-20 min-h-screen bg-[#111116] border-r border-[#1e1e25] flex-col overflow-hidden transition-[width] duration-300 ease-in-out"
+      className="hidden md:flex fixed top-0 left-0 z-20 min-h-screen bg-white/80 backdrop-blur-xl border-r border-[#e2e8e0] flex-col overflow-hidden transition-[width] duration-300 ease-in-out"
       style={{ width: sidebarW }}
     >
       {/* Brand */}
       <div
-        className={`border-b border-[#1e1e25] flex items-center gap-2.5 overflow-hidden whitespace-nowrap ${collapsed ? "justify-center px-0 py-5" : "px-4 py-5"}`}
+        className={`border-b border-[#e2e8e0] flex items-center gap-2.5 overflow-hidden whitespace-nowrap ${collapsed ? "justify-center px-0 py-5" : "px-4 py-5"}`}
       >
-        <span className="flex-shrink-0 text-purple-400">
-          <ShieldIcon size={20} />
+        <span className="flex-shrink-0 w-8 h-8 rounded-xl bg-[#1a6b3c] flex items-center justify-center text-white">
+          <ShieldIcon size={16} />
         </span>
         <span
-          className={`text-lg font-semibold text-white transition-all duration-200 overflow-hidden ${collapsed ? "opacity-0 w-0" : ""}`}
+          className={`text-lg font-bold text-[#1a1a2e] transition-all duration-200 overflow-hidden ${collapsed ? "opacity-0 w-0" : ""}`}
         >
           Lockora
         </span>
       </div>
 
       {/* Nav */}
-      <nav className="flex-1 py-3.5 px-2 overflow-y-auto overflow-x-hidden scrollbar-hide">
+      <nav className="flex-1 py-3.5 px-2.5 overflow-y-auto overflow-x-hidden scrollbar-hide">
+        {/* Section Label */}
+        <div
+          className={`text-[9px] uppercase tracking-[0.14em] text-[#8a9a72] px-3 py-1.5 whitespace-nowrap overflow-hidden transition-all duration-200 ${collapsed ? "opacity-0 h-0 p-0" : ""}`}
+        >
+          Menu
+        </div>
+
         {/* All Items / Vault */}
         <SbItem
           icon={<ShieldIcon size={16} />}
           label="All Items"
-          active={
-            activeNav === "vault" &&
-            !showFavoritesOnly &&
-            !activeFolder &&
-            !activeTag
-          }
+          active={activeNav === "vault" && !showFavoritesOnly && !activeFolder}
           collapsed={collapsed}
           onClick={() => {
             setActiveNav("vault");
             setShowFavoritesOnly?.(false);
             setActiveFolder?.("");
-            setActiveTag?.("");
           }}
         />
 
@@ -147,26 +142,25 @@ export default function Sidebar({
             setActiveNav("vault");
             setShowFavoritesOnly?.(!showFavoritesOnly);
             setActiveFolder?.("");
-            setActiveTag?.("");
           }}
-          color="#fbbf24"
+          color="#d97706"
         />
 
         {/* Folders section */}
         {!collapsed && (
           <>
-            <div className="h-px bg-[#1e1e25] my-2 mx-2" />
+            <div className="h-px bg-[#e2e8e0] my-2.5 mx-2" />
             <div className="flex items-center justify-between px-3 py-1.5">
               <button
                 onClick={() => setFoldersOpen((o) => !o)}
-                className="text-[9px] uppercase tracking-[0.14em] text-[#6b6b7b] bg-transparent border-none cursor-pointer hover:text-[#a0a0b0] transition-colors flex items-center gap-1 p-0"
+                className="text-[9px] uppercase tracking-[0.14em] text-[#8a9a72] bg-transparent border-none cursor-pointer hover:text-[#5a6a5a] transition-colors flex items-center gap-1 p-0"
               >
                 <ChevronIcon open={foldersOpen} />
                 Folders
               </button>
               <button
                 onClick={onNewFolder}
-                className="bg-transparent border-none p-0.5 rounded cursor-pointer text-[#a0a0b0] hover:text-purple-400 transition-colors"
+                className="bg-transparent border-none p-0.5 rounded cursor-pointer text-[#8a9a72] hover:text-[#1a6b3c] transition-colors"
                 title="New folder"
               >
                 <FolderPlusIcon size={13} />
@@ -175,7 +169,7 @@ export default function Sidebar({
             {foldersOpen && (
               <div className="pl-1">
                 {folders.length === 0 ? (
-                  <div className="text-[10px] text-[#a0a0b0] px-3 py-1.5">
+                  <div className="text-[10px] text-[#a0a8b0] px-3 py-1.5">
                     No folders yet
                   </div>
                 ) : (
@@ -191,7 +185,6 @@ export default function Sidebar({
                       onClick={() => {
                         setActiveNav("vault");
                         setActiveFolder?.(activeFolder === f.id ? "" : f.id);
-                        setActiveTag?.("");
                         setShowFavoritesOnly?.(false);
                       }}
                     >
@@ -200,7 +193,7 @@ export default function Sidebar({
                           e.stopPropagation();
                           onEditFolder?.(f);
                         }}
-                        className="bg-transparent border-none p-0 text-[#a0a0b0] hover:text-[#c0c0c0] cursor-pointer opacity-0 group-hover:opacity-100 transition-opacity flex-shrink-0"
+                        className="bg-transparent border-none p-0 text-[#8a9a72] hover:text-[#1a6b3c] cursor-pointer opacity-0 group-hover:opacity-100 transition-opacity flex-shrink-0"
                         title="Edit folder"
                       >
                         <span className="text-[10px]">✎</span>
@@ -213,54 +206,13 @@ export default function Sidebar({
           </>
         )}
 
-        {/* Tags section */}
-        {!collapsed && (
-          <>
-            <div className="h-px bg-[#1e1e25] my-2 mx-2" />
-            <button
-              onClick={() => setTagsOpen((o) => !o)}
-              className="text-[9px] uppercase tracking-[0.14em] text-[#6b6b7b] bg-transparent border-none cursor-pointer hover:text-[#a0a0b0] transition-colors flex items-center gap-1 px-3 py-1.5 w-full text-left"
-            >
-              <ChevronIcon open={tagsOpen} />
-              Tags
-            </button>
-            {tagsOpen && (
-              <div className="px-3 py-1 flex flex-wrap gap-1">
-                {allTags.length === 0 ? (
-                  <div className="text-[10px] text-[#a0a0b0] py-1">
-                    No tags yet
-                  </div>
-                ) : (
-                  allTags.map((tag) => (
-                    <button
-                      key={tag}
-                      onClick={() => {
-                        setActiveNav("vault");
-                        setActiveTag?.(activeTag === tag ? "" : tag);
-                        setActiveFolder?.("");
-                        setShowFavoritesOnly?.(false);
-                      }}
-                      className={`text-[10px] py-0.5 px-2 rounded-md border transition-all duration-200 cursor-pointer ${
-                        activeTag === tag
-                          ? "bg-purple-500/15 border-purple-500/30 text-purple-300"
-                          : "bg-[#1a1a20] border-[#1e1e25] text-[#a0a0b0] hover:border-[#3a3a45] hover:text-white]"
-                      }`}
-                    >
-                      #{tag}
-                      {tagCounts[tag] > 0 && (
-                        <span className="ml-1 text-[9px] opacity-60">
-                          {tagCounts[tag]}
-                        </span>
-                      )}
-                    </button>
-                  ))
-                )}
-              </div>
-            )}
-          </>
-        )}
+        <div className="h-px bg-[#e2e8e0] my-2.5 mx-2" />
 
-        <div className="h-px bg-[#1e1e25] my-2 mx-2" />
+        <div
+          className={`text-[9px] uppercase tracking-[0.14em] text-[#8a9a72] px-3 py-1.5 whitespace-nowrap overflow-hidden transition-all duration-200 ${collapsed ? "opacity-0 h-0 p-0" : ""}`}
+        >
+          General
+        </div>
 
         {/* Tools */}
         <SbItem
@@ -270,13 +222,6 @@ export default function Sidebar({
           collapsed={collapsed}
           onClick={() => setActiveNav("tools")}
         />
-
-        <div className="h-px bg-[#1e1e25] my-2 mx-2" />
-        <div
-          className={`text-[9px] uppercase tracking-[0.14em] text-[#6b6b7b] px-3 py-1.5 whitespace-nowrap overflow-hidden transition-all duration-200 ${collapsed ? "opacity-0 h-0 p-0" : ""}`}
-        >
-          Settings
-        </div>
 
         {/* Settings */}
         <SbItem
@@ -320,9 +265,9 @@ export default function Sidebar({
       </nav>
 
       {/* Footer */}
-      <div className="border-t border-[#1e1e25] px-2 py-3 overflow-hidden">
+      <div className="border-t border-[#e2e8e0] px-2.5 py-3 overflow-hidden">
         <div
-          className={`px-3 text-[10px] text-[#a0a0b0] mb-1 truncate transition-all duration-200 ${collapsed ? "opacity-0 h-0 p-0 m-0" : ""}`}
+          className={`px-3 text-[10px] text-[#8a9a72] mb-1 truncate transition-all duration-200 ${collapsed ? "opacity-0 h-0 p-0 m-0" : ""}`}
         >
           {user?.email}
         </div>

@@ -1,12 +1,12 @@
 import { encrypt, decrypt } from "./crypto";
 import { FIELDS } from "../constants/vault";
 
-// ── Shared Tailwind input classes ─────────────────────────────────────────────
+// ── Shared Tailwind input classes (Light green theme) ─────────────────────────
 export const inputCls =
-  "w-full py-2.5 px-3 bg-[#0f0f14] border border-[#232329] rounded-lg text-[12px] text-white outline-none placeholder:text-[#3a3a45] transition-all duration-200 focus:border-purple-500/50 focus:shadow-[0_0_0_3px_rgba(139,92,246,0.08)] resize-y";
+  "w-full py-2.5 px-3.5 bg-white border border-[#d4dcc8] rounded-xl text-[13px] text-[#1a1a2e] outline-none placeholder:text-[#a0a8b0] transition-all duration-200 focus:border-[#1a6b3c] focus:shadow-[0_0_0_3px_rgba(26,107,60,0.1)] resize-y";
 
 export const selectCls =
-  "w-full py-2.5 px-3 bg-[#0f0f14] border border-[#232329] rounded-lg text-[12px] text-white outline-none transition-all duration-200 focus:border-purple-500/50 cursor-pointer";
+  "w-full py-2.5 px-3.5 bg-white border border-[#d4dcc8] rounded-xl text-[13px] text-[#1a1a2e] outline-none transition-all duration-200 focus:border-[#1a6b3c] cursor-pointer";
 
 // ── Entry title / subtitle helpers ────────────────────────────────────────────
 export const getTitle = (e) =>

@@ -78,57 +78,57 @@ export default function SignIn() {
   };
 
   return (
-    <div className="min-h-screen bg-[#0b0b0f] flex items-center justify-center px-3 sm:px-4 py-6 sm:py-8 relative overflow-hidden">
+    <div className="min-h-screen bg-[#eef1e8] flex items-center justify-center px-3 sm:px-4 py-6 sm:py-8 relative overflow-hidden">
       {/* Ambient Glow */}
-      <div className="absolute top-[-200px] right-[-100px] w-[500px] h-[500px] rounded-full bg-purple-600/[0.06] blur-[120px] pointer-events-none" />
-      <div className="absolute bottom-[-150px] left-[-100px] w-[400px] h-[400px] rounded-full bg-violet-500/[0.05] blur-[100px] pointer-events-none" />
+      <div className="absolute top-[-200px] right-[-100px] w-[500px] h-[500px] rounded-full bg-[#1a6b3c]/[0.04] blur-[120px] pointer-events-none" />
+      <div className="absolute bottom-[-150px] left-[-100px] w-[400px] h-[400px] rounded-full bg-[#22a050]/[0.03] blur-[100px] pointer-events-none" />
 
       {/* Grid Pattern */}
-      <div className="absolute inset-0 opacity-[0.03] pointer-events-none"
+      <div className="absolute inset-0 opacity-[0.04] pointer-events-none"
         style={{
-          backgroundImage: "linear-gradient(rgba(255,255,255,.08) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,.08) 1px, transparent 1px)",
+          backgroundImage: "linear-gradient(rgba(26,107,60,.12) 1px, transparent 1px), linear-gradient(90deg, rgba(26,107,60,.12) 1px, transparent 1px)",
           backgroundSize: "60px 60px",
         }}
       />
 
       <div
-        className={`relative w-full max-w-[420px] bg-[#141418] border border-[#232329] rounded-2xl p-6 sm:p-8 md:p-11 shadow-2xl shadow-black/40 transition-all duration-700 ${mounted ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"}`}
+        className={`relative w-full max-w-[420px] bg-white border border-[#e2e8e0] rounded-2xl p-6 sm:p-8 md:p-11 shadow-2xl shadow-[#1a6b3c]/5 transition-all duration-700 ${mounted ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"}`}
       >
         {/* Accent Top Line */}
-        <div className="absolute top-0 left-10 right-10 h-[2px] bg-gradient-to-r from-transparent via-purple-500/60 to-transparent rounded-full" />
+        <div className="absolute top-0 left-10 right-10 h-[2px] bg-gradient-to-r from-transparent via-[#1a6b3c]/40 to-transparent rounded-full" />
 
         {/* Brand */}
         <div className="flex items-center gap-2.5 mb-5 sm:mb-8">
-          <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-purple-500 to-violet-600 flex items-center justify-center text-white shadow-lg shadow-purple-500/20">
+          <div className="w-9 h-9 rounded-xl bg-[#1a6b3c] flex items-center justify-center text-white shadow-lg shadow-[#1a6b3c]/20">
             <ShieldIcon size={18} />
           </div>
-          <span className="text-xl font-semibold text-white tracking-wide">Lockora</span>
+          <span className="text-xl font-bold text-[#1a1a2e] tracking-wide">Lockora</span>
         </div>
 
-        <h1 className="text-[22px] sm:text-[28px] font-light text-white mb-1.5 tracking-tight">Welcome back</h1>
-        <p className="text-[11px] text-[#6b6b7b] uppercase tracking-[0.1em] mb-5 sm:mb-8">Sign in to your vault</p>
+        <h1 className="text-[22px] sm:text-[28px] font-bold text-[#1a1a2e] mb-1.5 tracking-tight">Welcome back</h1>
+        <p className="text-[12px] text-[#8a9a72] tracking-wide mb-5 sm:mb-8">Sign in to your vault</p>
 
         {/* Google Button */}
         <button
           onClick={handleGoogle}
           disabled={googleLoading || loading}
-          className="w-full flex items-center justify-center gap-2.5 py-3 px-4 bg-[#1c1c22] border border-[#2a2a32] rounded-xl text-[13px] text-[#a0a0b0] tracking-wide transition-all duration-200 hover:border-[#3a3a45] hover:text-white hover:-translate-y-0.5 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:translate-y-0 mb-5 cursor-pointer"
+          className="w-full flex items-center justify-center gap-2.5 py-3 px-4 bg-[#f6f8f3] border border-[#e2e8e0] rounded-xl text-[13px] text-[#5a6a5a] tracking-wide transition-all duration-200 hover:border-[#c5cdb8] hover:text-[#1a1a2e] hover:-translate-y-0.5 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:translate-y-0 mb-5 cursor-pointer font-medium"
         >
-          {googleLoading ? <span className="w-4 h-4 border-[1.5px] border-[#333] border-t-[#4285F4] rounded-full animate-spin" /> : <GoogleIcon />}
+          {googleLoading ? <span className="w-4 h-4 border-[1.5px] border-[#e2e8e0] border-t-[#4285F4] rounded-full animate-spin" /> : <GoogleIcon />}
           {googleLoading ? "Connecting…" : "Continue with Google"}
         </button>
 
         {/* Divider */}
         <div className="flex items-center gap-3 mb-6">
-          <div className="flex-1 h-px bg-[#232329]" />
-          <span className="text-[10px] text-[#4a4a55] uppercase tracking-[0.12em]">or</span>
-          <div className="flex-1 h-px bg-[#232329]" />
+          <div className="flex-1 h-px bg-[#e2e8e0]" />
+          <span className="text-[10px] text-[#8a9a72] uppercase tracking-[0.12em]">or</span>
+          <div className="flex-1 h-px bg-[#e2e8e0]" />
         </div>
 
         {/* Form */}
         <form onSubmit={handleSignIn}>
           <div className="mb-4">
-            <label className="block text-[10px] uppercase tracking-[0.12em] text-[#6b6b7b] mb-2">Email address</label>
+            <label className="block text-[10px] uppercase tracking-[0.12em] text-[#8a9a72] mb-2 font-medium">Email address</label>
             <input
               type="email"
               placeholder="you@example.com"
@@ -136,11 +136,11 @@ export default function SignIn() {
               onChange={(e) => setEmail(e.target.value)}
               required
               autoComplete="email"
-              className="w-full py-3 px-3.5 bg-[#0f0f14] border border-[#232329] rounded-xl text-[13px] text-white outline-none placeholder:text-[#3a3a45] transition-all duration-200 focus:border-purple-500/50 focus:shadow-[0_0_0_3px_rgba(139,92,246,0.08)]"
+              className="w-full py-3 px-3.5 bg-white border border-[#d4dcc8] rounded-xl text-[13px] text-[#1a1a2e] outline-none placeholder:text-[#a0a8b0] transition-all duration-200 focus:border-[#1a6b3c] focus:shadow-[0_0_0_3px_rgba(26,107,60,0.08)]"
             />
           </div>
           <div className="mb-2">
-            <label className="block text-[10px] uppercase tracking-[0.12em] text-[#6b6b7b] mb-2">Master password</label>
+            <label className="block text-[10px] uppercase tracking-[0.12em] text-[#8a9a72] mb-2 font-medium">Master password</label>
             <div className="relative">
               <input
                 type={showPass ? "text" : "password"}
@@ -149,21 +149,21 @@ export default function SignIn() {
                 onChange={(e) => setPassword(e.target.value)}
                 required
                 autoComplete="current-password"
-                className="w-full py-3 px-3.5 pr-10 bg-[#0f0f14] border border-[#232329] rounded-xl text-[13px] text-white outline-none placeholder:text-[#3a3a45] transition-all duration-200 focus:border-purple-500/50 focus:shadow-[0_0_0_3px_rgba(139,92,246,0.08)]"
+                className="w-full py-3 px-3.5 pr-10 bg-white border border-[#d4dcc8] rounded-xl text-[13px] text-[#1a1a2e] outline-none placeholder:text-[#a0a8b0] transition-all duration-200 focus:border-[#1a6b3c] focus:shadow-[0_0_0_3px_rgba(26,107,60,0.08)]"
               />
-              <button type="button" onClick={() => setShowPass(!showPass)} className="absolute right-3 top-1/2 -translate-y-1/2 text-[#4a4a55] hover:text-[#8b8b9b] transition-colors duration-200 bg-transparent border-none flex items-center p-0.5 cursor-pointer">
+              <button type="button" onClick={() => setShowPass(!showPass)} className="absolute right-3 top-1/2 -translate-y-1/2 text-[#8a9a72] hover:text-[#1a6b3c] transition-colors duration-200 bg-transparent border-none flex items-center p-0.5 cursor-pointer">
                 <EyeIcon open={showPass} />
               </button>
             </div>
             <div className="text-right mt-1.5">
-              <a href="#" className="text-[10px] text-[#6b6b7b] hover:text-purple-400 tracking-wide transition-colors duration-200 no-underline">Forgot password?</a>
+              <a href="#" className="text-[10px] text-[#8a9a72] hover:text-[#1a6b3c] tracking-wide transition-colors duration-200 no-underline">Forgot password?</a>
             </div>
           </div>
 
           <button
             type="submit"
             disabled={loading || googleLoading}
-            className="w-full py-3.5 bg-gradient-to-r from-purple-600 to-violet-600 hover:from-purple-500 hover:to-violet-500 text-white border-none rounded-xl text-[12px] font-medium uppercase tracking-[0.12em] transition-all duration-300 hover:-translate-y-0.5 hover:shadow-lg hover:shadow-purple-500/20 disabled:opacity-60 disabled:cursor-not-allowed disabled:hover:translate-y-0 mt-2 cursor-pointer"
+            className="w-full py-3.5 bg-[#1a6b3c] hover:bg-[#145a31] text-white border-none rounded-xl text-[12px] font-semibold uppercase tracking-[0.12em] transition-all duration-300 hover:-translate-y-0.5 hover:shadow-lg hover:shadow-[#1a6b3c]/20 disabled:opacity-60 disabled:cursor-not-allowed disabled:hover:translate-y-0 mt-2 cursor-pointer"
           >
             {loading ? <><span className="inline-block w-3.5 h-3.5 border-[1.5px] border-white/30 border-t-white rounded-full animate-spin align-middle mr-2" />Verifying…</> : "Unlock Vault →"}
           </button>
@@ -171,14 +171,14 @@ export default function SignIn() {
 
         {/* Error */}
         {error && (
-          <div className="mt-4 py-2.5 px-3.5 rounded-xl text-[11px] tracking-wide bg-red-500/[0.06] border border-red-500/20 text-red-400">
+          <div className="mt-4 py-2.5 px-3.5 rounded-xl text-[11px] tracking-wide bg-red-50 border border-red-200 text-red-500">
             ⚠ {error}
           </div>
         )}
 
         {/* Footer */}
-        <div className="mt-7 text-center text-[11px] text-[#4a4a55] tracking-wide">
-          Don't have an account? <Link to="/signup" className="text-purple-400 hover:text-purple-300 no-underline transition-colors duration-200">Create one</Link>
+        <div className="mt-7 text-center text-[11px] text-[#8a9a72] tracking-wide">
+          Don't have an account? <Link to="/signup" className="text-[#1a6b3c] hover:text-[#145a31] no-underline font-medium transition-colors duration-200">Create one</Link>
         </div>
       </div>
     </div>

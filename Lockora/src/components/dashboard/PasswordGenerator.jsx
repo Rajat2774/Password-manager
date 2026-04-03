@@ -41,20 +41,20 @@ export default function PasswordGenerator({ onUsePassword }) {
   const toggle = (key) => setOpts((o) => ({ ...o, [key]: !o[key] }));
 
   const Toggle = ({ label, k, desc }) => (
-    <div className="flex items-center justify-between py-3 border-b border-[#1e1e25] last:border-b-0">
+    <div className="flex items-center justify-between py-3 border-b border-[#e2e8e0] last:border-b-0">
       <div>
-        <div className="text-[12px] text-white">{label}</div>
+        <div className="text-[13px] text-[#1a1a2e] font-medium">{label}</div>
         {desc && (
-          <div className="text-[10px] text-[#a0a0b0] mt-0.5">{desc}</div>
+          <div className="text-[10px] text-[#8a9a72] mt-0.5">{desc}</div>
         )}
       </div>
       <button
         type="button"
         onClick={() => toggle(k)}
-        className={`relative w-10 h-5 rounded-full border-none transition-all duration-200 cursor-pointer flex-shrink-0 ${opts[k] ? "bg-purple-500" : "bg-[#232329]"}`}
+        className={`relative w-10 h-5 rounded-full border-none transition-all duration-200 cursor-pointer flex-shrink-0 ${opts[k] ? "bg-[#1a6b3c]" : "bg-[#d4dcc8]"}`}
       >
         <span
-          className={`absolute top-0.5 w-4 h-4 bg-white rounded-full transition-all duration-200 ${opts[k] ? "left-[calc(100%-18px)]" : "left-0.5"}`}
+          className={`absolute top-0.5 w-4 h-4 bg-white rounded-full transition-all duration-200 shadow-sm ${opts[k] ? "left-[calc(100%-18px)]" : "left-0.5"}`}
         />
       </button>
     </div>
@@ -62,10 +62,10 @@ export default function PasswordGenerator({ onUsePassword }) {
 
   return (
     <div className="w-full max-w-[700px] px-1 sm:px-0">
-      <h2 className="text-[22px] md:text-[26px] font-semibold text-white mb-2">
+      <h2 className="text-[22px] md:text-[28px] font-bold text-[#1a1a2e] mb-1">
         Password Generator
       </h2>
-      <p className="text-[12px] text-[#a0a0b0] mb-6 leading-relaxed">
+      <p className="text-[13px] text-[#6b7c6b] mb-6 leading-relaxed">
         Generate strong, unique passwords with customizable length, character
         sets, and patterns.
       </p>
@@ -74,21 +74,21 @@ export default function PasswordGenerator({ onUsePassword }) {
         {/* ── Left: output + controls ── */}
         <div className="flex flex-col gap-4">
           {/* Generated password display */}
-          <div className="bg-[#141418] border border-[#232329] rounded-2xl p-4 md:p-5">
+          <div className="bg-white border border-[#e2e8e0] rounded-2xl p-4 md:p-5 shadow-sm">
             <div className="flex items-center gap-2 mb-3">
               <div
-                className="flex-1 font-mono text-[13px] md:text-[15px] text-white bg-[#0f0f14] border border-[#232329] rounded-xl px-3 md:px-4 py-3 min-h-[48px] md:min-h-[52px] break-all leading-relaxed select-all"
+                className="flex-1 font-mono text-[13px] md:text-[15px] text-[#1a1a2e] bg-[#f6f8f3] border border-[#e2e8e0] rounded-xl px-3 md:px-4 py-3 min-h-[48px] md:min-h-[52px] break-all leading-relaxed select-all"
                 style={{ wordBreak: "break-all" }}
               >
                 {password || (
-                  <span className="text-[#a0a0b0]">Click generate…</span>
+                  <span className="text-[#a0a8b0]">Click generate…</span>
                 )}
               </div>
               <div className="flex flex-col gap-2">
                 <button
                   onClick={() => copy(password)}
                   title="Copy"
-                  className={`w-10 h-10 rounded-xl border flex items-center justify-center transition-all duration-200 cursor-pointer ${copied ? "bg-emerald-500/15 border-emerald-500/30 text-emerald-400" : "bg-[#1a1a20] border-[#232329] text-[#a0a0b0] hover:border-purple-500/30 hover:text-purple-300"}`}
+                  className={`w-10 h-10 rounded-xl border flex items-center justify-center transition-all duration-200 cursor-pointer ${copied ? "bg-emerald-50 border-emerald-300/50 text-emerald-500" : "bg-[#f6f8f3] border-[#e2e8e0] text-[#6b7c6b] hover:border-[#1a6b3c]/30 hover:text-[#1a6b3c]"}`}
                 >
                   {copied ? (
                     <span className="text-[13px]">✓</span>
@@ -99,7 +99,7 @@ export default function PasswordGenerator({ onUsePassword }) {
                 <button
                   onClick={generate}
                   title="Regenerate"
-                  className="w-10 h-10 rounded-xl bg-[#1a1a20] border border-[#232329] text-[#a0a0b0] hover:border-purple-500/30 hover:text-purple-300 flex items-center justify-center transition-all duration-200 cursor-pointer"
+                  className="w-10 h-10 rounded-xl bg-[#f6f8f3] border border-[#e2e8e0] text-[#6b7c6b] hover:border-[#1a6b3c]/30 hover:text-[#1a6b3c] flex items-center justify-center transition-all duration-200 cursor-pointer"
                 >
                   <RefreshIcon />
                 </button>
@@ -110,17 +110,17 @@ export default function PasswordGenerator({ onUsePassword }) {
             {password && (
               <div>
                 <div className="flex items-center justify-between mb-1.5">
-                  <span className="text-[10px] text-[#a0a0b0] uppercase tracking-[0.08em]">
+                  <span className="text-[10px] text-[#8a9a72] uppercase tracking-[0.08em]">
                     Strength
                   </span>
                   <span
-                    className="text-[11px] font-medium"
+                    className="text-[11px] font-semibold"
                     style={{ color: strength.color }}
                   >
                     {strength.label}
                   </span>
                 </div>
-                <div className="h-1.5 bg-[#1e1e25] rounded-full overflow-hidden">
+                <div className="h-2 bg-[#e6ebe0] rounded-full overflow-hidden">
                   <div
                     className="h-full rounded-full transition-all duration-500"
                     style={{
@@ -134,10 +134,10 @@ export default function PasswordGenerator({ onUsePassword }) {
           </div>
 
           {/* Length slider */}
-          <div className="bg-[#141418] border border-[#232329] rounded-2xl p-4 md:p-5">
+          <div className="bg-white border border-[#e2e8e0] rounded-2xl p-4 md:p-5 shadow-sm">
             <div className="flex items-center justify-between mb-3">
-              <span className="text-[13px] text-white">Length</span>
-              <span className="text-[13px] font-mono text-purple-300 bg-purple-500/10 border border-purple-500/20 px-3 py-0.5 rounded-lg">
+              <span className="text-[13px] text-[#1a1a2e] font-medium">Length</span>
+              <span className="text-[13px] font-mono text-[#1a6b3c] bg-[#1a6b3c]/8 border border-[#1a6b3c]/20 px-3 py-0.5 rounded-lg font-semibold">
                 {opts.length}
               </span>
             </div>
@@ -150,30 +150,30 @@ export default function PasswordGenerator({ onUsePassword }) {
               onChange={(e) =>
                 setOpts((o) => ({ ...o, length: +e.target.value }))
               }
-              className="w-full accent-purple-500 cursor-pointer"
+              className="w-full cursor-pointer"
             />
             <div className="flex justify-between mt-1.5">
-              <span className="text-[10px] text-[#a0a0b0]">6</span>
-              <span className="text-[10px] text-[#a0a0b0]">128</span>
+              <span className="text-[10px] text-[#8a9a72]">6</span>
+              <span className="text-[10px] text-[#8a9a72]">128</span>
             </div>
           </div>
 
           {/* Pattern mode */}
-          <div className="bg-[#141418] border border-[#232329] rounded-2xl p-4 md:p-5">
+          <div className="bg-white border border-[#e2e8e0] rounded-2xl p-4 md:p-5 shadow-sm">
             <div className="flex items-center justify-between mb-3">
               <div>
-                <div className="text-[13px] text-white">Custom pattern</div>
-                <div className="text-[10px] text-[#a0a0b0] mt-0.5">
+                <div className="text-[13px] text-[#1a1a2e] font-medium">Custom pattern</div>
+                <div className="text-[10px] text-[#8a9a72] mt-0.5">
                   Use X=any, A=upper, a=lower, 0=digit, S=symbol
                 </div>
               </div>
               <button
                 type="button"
                 onClick={() => setUsePattern((p) => !p)}
-                className={`relative w-10 h-5 rounded-full border-none transition-all duration-200 cursor-pointer flex-shrink-0 ${usePattern ? "bg-purple-500" : "bg-[#232329]"}`}
+                className={`relative w-10 h-5 rounded-full border-none transition-all duration-200 cursor-pointer flex-shrink-0 ${usePattern ? "bg-[#1a6b3c]" : "bg-[#d4dcc8]"}`}
               >
                 <span
-                  className={`absolute top-0.5 w-4 h-4 bg-white rounded-full transition-all duration-200 ${usePattern ? "left-[calc(100%-18px)]" : "left-0.5"}`}
+                  className={`absolute top-0.5 w-4 h-4 bg-white rounded-full transition-all duration-200 shadow-sm ${usePattern ? "left-[calc(100%-18px)]" : "left-0.5"}`}
                 />
               </button>
             </div>
@@ -194,14 +194,14 @@ export default function PasswordGenerator({ onUsePassword }) {
           <div className="flex gap-2.5 flex-wrap">
             <button
               onClick={generate}
-              className="flex items-center justify-center gap-2 py-2.5 px-5 bg-gradient-to-r from-purple-600 to-violet-600 hover:from-purple-500 hover:to-violet-500 text-white border-none rounded-xl text-[11px] uppercase tracking-[0.1em] transition-all duration-300 hover:-translate-y-0.5 hover:shadow-lg hover:shadow-purple-500/20 cursor-pointer flex-1 sm:flex-initial"
+              className="flex items-center justify-center gap-2 py-2.5 px-5 bg-[#1a6b3c] hover:bg-[#145a31] text-white border-none rounded-xl text-[12px] font-medium tracking-wide transition-all duration-300 hover:-translate-y-0.5 hover:shadow-lg hover:shadow-[#1a6b3c]/20 cursor-pointer flex-1 sm:flex-initial"
             >
               <RefreshIcon /> Generate
             </button>
             {onUsePassword && password && (
               <button
                 onClick={() => onUsePassword(password)}
-                className="flex items-center justify-center gap-2 py-2.5 px-5 bg-[#1a1a20] hover:bg-[#232329] border border-[#232329] hover:border-purple-500/30 text-[#a0a0b0] hover:text-purple-300 rounded-xl text-[11px] uppercase tracking-[0.1em] transition-all duration-200 cursor-pointer flex-1 sm:flex-initial"
+                className="flex items-center justify-center gap-2 py-2.5 px-5 bg-white hover:bg-[#f6f8f3] border border-[#e2e8e0] hover:border-[#1a6b3c]/30 text-[#5a6a5a] hover:text-[#1a6b3c] rounded-xl text-[12px] font-medium tracking-wide transition-all duration-200 cursor-pointer flex-1 sm:flex-initial"
               >
                 <SaveIcon /> Use this password
               </button>
@@ -212,8 +212,8 @@ export default function PasswordGenerator({ onUsePassword }) {
         {/* ── Right: options + history ── */}
         <div className="flex flex-col gap-4">
           {/* Character set toggles */}
-          <div className="bg-[#141418] border border-[#232329] rounded-2xl p-4 md:p-5">
-            <div className="text-[11px] uppercase tracking-[0.1em] text-[#a0a0b0] mb-3">
+          <div className="bg-white border border-[#e2e8e0] rounded-2xl p-4 md:p-5 shadow-sm">
+            <div className="text-[11px] uppercase tracking-[0.1em] text-[#8a9a72] mb-3 font-medium">
               Character sets
             </div>
             <Toggle label="Uppercase" k="uppercase" desc="A – Z" />
@@ -229,19 +229,19 @@ export default function PasswordGenerator({ onUsePassword }) {
 
           {/* History */}
           {history.length > 1 && (
-            <div className="bg-[#141418] border border-[#232329] rounded-2xl p-4 md:p-5">
-              <div className="text-[11px] uppercase tracking-[0.1em] text-[#a0a0b0] mb-3">
+            <div className="bg-white border border-[#e2e8e0] rounded-2xl p-4 md:p-5 shadow-sm">
+              <div className="text-[11px] uppercase tracking-[0.1em] text-[#8a9a72] mb-3 font-medium">
                 Recent ({history.length})
               </div>
               <div className="flex flex-col gap-1 max-h-[200px] overflow-y-auto">
                 {history.map((pw, i) => (
                   <div key={i} className="flex items-center gap-2 group">
-                    <span className="flex-1 font-mono text-[11px] text-[#a0a0b0] group-hover:text-white truncate transition-colors">
+                    <span className="flex-1 font-mono text-[11px] text-[#6b7c6b] group-hover:text-[#1a1a2e] truncate transition-colors">
                       {pw}
                     </span>
                     <button
                       onClick={() => copy(pw)}
-                      className="opacity-0 group-hover:opacity-100 bg-transparent border-none text-[#a0a0b0] hover:text-purple-300 flex items-center cursor-pointer transition-all p-1"
+                      className="opacity-0 group-hover:opacity-100 bg-transparent border-none text-[#8a9a72] hover:text-[#1a6b3c] flex items-center cursor-pointer transition-all p-1"
                     >
                       <CopyIcon />
                     </button>

@@ -72,13 +72,16 @@ export default function SecuritySettings({
 
   return (
     <div className="w-full max-w-[600px] px-1 sm:px-0">
-      <h2 className="text-[22px] md:text-[26px] font-light text-white mb-4 md:mb-6">
+      <h2 className="text-[22px] md:text-[28px] font-bold text-[#1a1a2e] mb-1">
         Security
       </h2>
+      <p className="text-[13px] text-[#6b7c6b] mb-6">
+        Manage your vault security and session settings.
+      </p>
 
-      <div className="bg-[#141418] border border-[#232329] rounded-2xl p-4 md:p-5 mb-4">
-        <div className="text-[13px] text-white mb-1.5">Session timeout</div>
-        <div className="text-[11px] text-[#4a4a55] leading-relaxed">
+      <div className="bg-white border border-[#e2e8e0] rounded-2xl p-4 md:p-5 mb-4 shadow-sm">
+        <div className="text-[14px] text-[#1a1a2e] mb-1.5 font-semibold">Session timeout</div>
+        <div className="text-[12px] text-[#6b7c6b] leading-relaxed">
           Locks your vault after inactivity — you stay logged in but must
           re-enter your master password.
         </div>
@@ -87,7 +90,7 @@ export default function SecuritySettings({
             <button
               key={o.value}
               onClick={() => setSessionTimeout(o.value)}
-              className={`py-1.5 px-3 sm:px-3.5 rounded-lg border text-[11px] transition-all cursor-pointer ${sessionTimeout === o.value ? "bg-purple-500/15 border-purple-500/30 text-purple-300" : "bg-[#1a1a20] border-[#232329] text-[#6b6b7b] hover:border-[#3a3a45] hover:text-[#a0a0b0]"}`}
+              className={`py-2 px-3.5 sm:px-4 rounded-xl border text-[12px] font-medium transition-all cursor-pointer ${sessionTimeout === o.value ? "bg-[#1a6b3c] border-[#1a6b3c] text-white shadow-md shadow-[#1a6b3c]/15" : "bg-[#f6f8f3] border-[#e2e8e0] text-[#5a6a5a] hover:border-[#c5cdb8] hover:text-[#1a1a2e]"}`}
             >
               {o.label}
             </button>
@@ -95,16 +98,16 @@ export default function SecuritySettings({
         </div>
       </div>
 
-      <div className="bg-[#141418] border border-[#232329] rounded-2xl p-4 md:p-5 mb-4">
-        <div className="text-[13px] text-white mb-1.5">
+      <div className="bg-white border border-[#e2e8e0] rounded-2xl p-4 md:p-5 mb-4 shadow-sm">
+        <div className="text-[14px] text-[#1a1a2e] mb-1.5 font-semibold">
           Change master password
         </div>
-        <div className="text-[11px] text-[#4a4a55] leading-relaxed mb-4">
+        <div className="text-[12px] text-[#6b7c6b] leading-relaxed mb-4">
           After changing, you will be redirected to the unlock screen.
         </div>
         <form onSubmit={handleChangeMaster} className="flex flex-col gap-3">
           <div className="flex flex-col gap-1.5">
-            <label className="text-[10px] uppercase tracking-[0.1em] text-[#6b6b7b]">
+            <label className="text-[10px] uppercase tracking-[0.1em] text-[#8a9a72] font-medium">
               New master password
             </label>
             <input
@@ -117,7 +120,7 @@ export default function SecuritySettings({
             />
           </div>
           <div className="flex flex-col gap-1.5">
-            <label className="text-[10px] uppercase tracking-[0.1em] text-[#6b6b7b]">
+            <label className="text-[10px] uppercase tracking-[0.1em] text-[#8a9a72] font-medium">
               Confirm new master password
             </label>
             <input
@@ -130,36 +133,36 @@ export default function SecuritySettings({
             />
           </div>
           {err && (
-            <div className="text-[11px] text-red-400 py-2 px-3 bg-red-500/[0.06] border border-red-500/20 rounded-lg">
+            <div className="text-[12px] text-red-500 py-2 px-3 bg-red-50 border border-red-200 rounded-xl">
               {err}
             </div>
           )}
           {msg && (
-            <div className="text-[11px] text-emerald-400 py-2 px-3 bg-emerald-500/[0.06] border border-emerald-500/20 rounded-lg">
+            <div className="text-[12px] text-emerald-600 py-2 px-3 bg-emerald-50 border border-emerald-200 rounded-xl">
               {msg}
             </div>
           )}
           <button
             type="submit"
             disabled={changing}
-            className="self-start py-2.5 px-5 bg-gradient-to-r from-purple-600 to-violet-600 hover:from-purple-500 hover:to-violet-500 text-white border-none rounded-lg text-[11px] uppercase tracking-[0.1em] transition-all disabled:opacity-60 disabled:cursor-not-allowed cursor-pointer"
+            className="self-start py-2.5 px-5 bg-[#1a6b3c] hover:bg-[#145a31] text-white border-none rounded-xl text-[12px] font-medium tracking-wide transition-all disabled:opacity-60 disabled:cursor-not-allowed cursor-pointer"
           >
             {changing ? "Updating…" : "Update master password"}
           </button>
         </form>
       </div>
 
-      <div className="bg-[#141418] border border-[#232329] rounded-2xl p-4 md:p-5 mb-4">
-        <div className="text-[13px] text-white mb-1.5">
+      <div className="bg-white border border-[#e2e8e0] rounded-2xl p-4 md:p-5 mb-4 shadow-sm">
+        <div className="text-[14px] text-[#1a1a2e] mb-1.5 font-semibold">
           Check password breach
         </div>
-        <div className="text-[11px] text-[#4a4a55] leading-relaxed mb-4">
+        <div className="text-[12px] text-[#6b7c6b] leading-relaxed mb-4">
           Check if a password has been found in known data breaches using
           HaveIBeenPwned.
         </div>
         <div className="flex flex-col gap-3">
           <div className="flex flex-col gap-1.5">
-            <label className="text-[10px] uppercase tracking-[0.1em] text-[#6b6b7b]">
+            <label className="text-[10px] uppercase tracking-[0.1em] text-[#8a9a72] font-medium">
               Password to check
             </label>
             <input
@@ -172,12 +175,12 @@ export default function SecuritySettings({
           </div>
           {breachResult !== null && (
             <div
-              className={`text-[11px] py-2 px-3 rounded-lg ${
+              className={`text-[12px] py-2.5 px-3.5 rounded-xl ${
                 breachResult === 0
-                  ? "text-emerald-400 bg-emerald-500/[0.06] border border-emerald-500/20"
+                  ? "text-emerald-600 bg-emerald-50 border border-emerald-200"
                   : breachResult > 0
-                    ? "text-red-400 bg-red-500/[0.06] border border-red-500/20"
-                    : "text-yellow-400 bg-yellow-500/[0.06] border border-yellow-500/20"
+                    ? "text-red-500 bg-red-50 border border-red-200"
+                    : "text-amber-600 bg-amber-50 border border-amber-200"
               }`}
             >
               {breachResult === 0
@@ -190,27 +193,27 @@ export default function SecuritySettings({
           <button
             onClick={handleCheckBreach}
             disabled={checkingBreach || !breachPassword.trim()}
-            className="self-start py-2.5 px-5 bg-gradient-to-r from-purple-600 to-violet-600 hover:from-purple-500 hover:to-violet-500 text-white border-none rounded-lg text-[11px] uppercase tracking-[0.1em] transition-all disabled:opacity-60 disabled:cursor-not-allowed cursor-pointer"
+            className="self-start py-2.5 px-5 bg-[#1a6b3c] hover:bg-[#145a31] text-white border-none rounded-xl text-[12px] font-medium tracking-wide transition-all disabled:opacity-60 disabled:cursor-not-allowed cursor-pointer"
           >
             {checkingBreach ? "Checking…" : "Check breach"}
           </button>
         </div>
       </div>
 
-      <div className="bg-[#141418] border border-[#232329] rounded-2xl p-4 md:p-5">
-        <div className="text-[13px] text-white mb-1.5">Active sessions</div>
-        <div className="text-[11px] text-[#4a4a55] leading-relaxed mb-3.5">
+      <div className="bg-white border border-[#e2e8e0] rounded-2xl p-4 md:p-5 shadow-sm">
+        <div className="text-[14px] text-[#1a1a2e] mb-1.5 font-semibold">Active sessions</div>
+        <div className="text-[12px] text-[#6b7c6b] leading-relaxed mb-3.5">
           Devices currently signed in to your vault.
         </div>
-        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between py-3 border-b border-[#1e1e25] last:border-b-0 gap-2 sm:gap-0">
+        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between py-3 border-b border-[#e2e8e0] last:border-b-0 gap-2 sm:gap-0">
           <div>
-            <div className="text-[12px] text-white flex items-center gap-2">
+            <div className="text-[13px] text-[#1a1a2e] font-medium flex items-center gap-2">
               This device{" "}
-              <span className="text-[9px] bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 rounded py-px px-1.5 tracking-wide">
+              <span className="text-[9px] bg-emerald-50 text-emerald-600 border border-emerald-200 rounded-full py-px px-2 tracking-wide font-semibold">
                 Current
               </span>
             </div>
-            <div className="text-[11px] text-[#4a4a55] mt-0.5">
+            <div className="text-[11px] text-[#6b7c6b] mt-0.5">
               {navigator.userAgent.includes("Chrome") ? "Chrome" : "Browser"} ·
               Last seen: Now
             </div>
