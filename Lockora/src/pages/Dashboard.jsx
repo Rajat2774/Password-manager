@@ -9,6 +9,7 @@ import {
   deleteDoc,
   doc,
   updateDoc,
+  getDoc,
   serverTimestamp,
   onSnapshot,
 } from "firebase/firestore";
@@ -240,6 +241,20 @@ export default function Dashboard() {
   const [folderModal, setFolderModal] = useState(null); // null | "new" | folder object
 
 
+  // ── Handle session timeout change ─────────────────────────────────────────
+  const handleSetSessionTimeout = async (value) => {
+    setSessionTimeout(value);
+    if (!user) return;
+    try {
+      const snap = await getDoc(doc(db, "users", user.uid, "vault", "meta"));
+      const data = snap.exists() ? snap.data() : {};
+      await updateDoc(doc(db, "users", user.uid, "vault", "meta"), { ...data, sessionTimeout: value });
+    } catch (e) {
+      console.error("Failed to save timeout", e);
+    }
+  };
+
+
   // ── Responsive breakpoint listener ────────────────────────────────────────
   useEffect(() => {
     const mq = window.matchMedia("(min-width: 768px)");
@@ -272,6 +287,25 @@ export default function Dashboard() {
       if (foldersUnsubRef.current) foldersUnsubRef.current();
     };
   }, [cryptoKey]);
+
+  // ── Load user settings ────────────────────────────────────────────────────
+  useEffect(() => {
+    if (!user) return;
+    const loadSettings = async () => {
+      try {
+        const snap = await getDoc(doc(db, "users", user.uid, "vault", "meta"));
+        if (snap.exists()) {
+          const data = snap.data();
+          if (data.sessionTimeout !== undefined) {
+            setSessionTimeout(data.sessionTimeout);
+          }
+        }
+      } catch (e) {
+        console.error("Failed to load settings", e);
+      }
+    };
+    loadSettings();
+  }, [user]);
 
   // ── Session timeout → lock vault ──────────────────────────────────────────
   useEffect(() => {
@@ -717,7 +751,7 @@ export default function Dashboard() {
           <SecuritySettings
             user={user}
             sessionTimeout={sessionTimeout}
-            setSessionTimeout={setSessionTimeout}
+            setSessionTimeout={handleSetSessionTimeout}
           />
         )}
       </main>

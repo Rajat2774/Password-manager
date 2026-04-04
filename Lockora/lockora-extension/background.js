@@ -162,7 +162,7 @@ chrome.alarms.onAlarm.addListener((alarm) => {
         if (tab.id) {
           chrome.tabs
             .sendMessage(tab.id, { type: "VAULT_LOCKED" })
-            .catch(() => {});
+            .catch(() => { });
         }
       }
     });
@@ -236,7 +236,7 @@ async function getGoogleClientId() {
     const gc = (data2.signIn?.idpConfig || []).find((p) => p.provider === "GOOGLE");
     if (gc?.clientId) { cachedGoogleClientId = gc.clientId; return cachedGoogleClientId; }
   } catch (err) {
-    console.error("[Lockora] Failed to fetch Google Client ID:", err);
+    console.error("[Lockyt] Failed to fetch Google Client ID:", err);
   }
   return null;
 }
@@ -515,6 +515,20 @@ async function handleMessage(msg, sender) {
 
       cryptoKey = key;
       currentUid = session.uid;
+
+      // Sync timeout from Firebase
+      try {
+        const snap = await getDoc(doc(db, "users", session.uid, "vault", "meta"));
+        if (snap.exists()) {
+          const data = snap.data();
+          if (data.sessionTimeout !== undefined) {
+            await chrome.storage.local.set({ lockTimeout: data.sessionTimeout });
+          }
+        }
+      } catch (e) {
+        console.error("Failed to sync timeout", e);
+      }
+
       await chrome.storage.session.set({
         needsMasterPassword: false,
         unlockedAt: Date.now(),
@@ -564,10 +578,7 @@ async function handleMessage(msg, sender) {
     }
 
     // ── Get pending save (content script checks after navigation) ────────────
-    // FIX: No longer requires cryptoKey to return the pending save data.
-    // The vault-locked check only happens at save time (SAVE_CREDENTIALS).
-    // This ensures the "Save to Lockora" banner always appears after login,
-    // even if the SW was restarted and needs re-unlocking.
+
     case "GET_PENDING_SAVE": {
       const tabId = sender?.tab?.id;
       if (!tabId) return { ok: false };
@@ -682,6 +693,6 @@ chrome.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
     tab.url &&
     !tab.url.startsWith("chrome://")
   ) {
-    chrome.tabs.sendMessage(tabId, { type: "TAB_READY" }).catch(() => {});
+    chrome.tabs.sendMessage(tabId, { type: "TAB_READY" }).catch(() => { });
   }
 });

@@ -46,7 +46,7 @@ export default function SecuritySettings({
       const { deriveKey, encryptCanary } = await import("../../utils/crypto");
       const newKey = await deriveKey(newMaster, user.uid);
       const canary = await encryptCanary(newKey);
-      await setDoc(doc(db, "users", user.uid, "vault", "meta"), { canary });
+      await setDoc(doc(db, "users", user.uid, "vault", "meta"), { canary }, { merge: true });
       setMsg("Master password updated. Redirecting…");
       setTimeout(() => navigate("/unlock", { replace: true }), 2500);
     } catch {

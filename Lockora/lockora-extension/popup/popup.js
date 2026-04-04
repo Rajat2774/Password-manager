@@ -79,6 +79,7 @@ async function init() {
       $("unlock-email").textContent = `${session.email} · Session timed out`;
       $("unlock-email").dataset.reason = "timeout";
       showScreen("screen-unlock");
+      checkAndShowNewUserState();
       loadHint();
       return;
     }
@@ -88,6 +89,7 @@ async function init() {
       $("unlock-email").textContent = session.email;
       $("unlock-email").dataset.reason = "swrestart";
       showScreen("screen-unlock");
+      checkAndShowNewUserState();
       loadHint();
       return;
     }
@@ -103,6 +105,7 @@ async function init() {
     if (session.email) {
       $("unlock-email").textContent = session.email;
       showScreen("screen-unlock");
+      checkAndShowNewUserState();
       loadHint();
       return;
     }

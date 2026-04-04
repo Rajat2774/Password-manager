@@ -11,7 +11,7 @@ const features = [
   {
     emoji: "🔑",
     title: "One-Click Autofill",
-    desc: "Lockora detects login forms automatically and fills your credentials with a single click. No more copy-pasting.",
+    desc: "Lockyt detects login forms automatically and fills your credentials with a single click. No more copy-pasting.",
   },
   {
     emoji: "💾",
@@ -34,17 +34,17 @@ const steps = [
   {
     step: "01",
     title: "Install the Extension",
-    desc: "Click the download button and add Lockora to your Chrome browser from the Chrome Web Store.",
+    desc: "Click the download button and add Lockyt to your Chrome browser from the Chrome Web Store.",
   },
   {
     step: "02",
     title: "Sign In to Your Vault",
-    desc: "Use your Lockora credentials or Google sign-in to authenticate, then enter your master password to unlock.",
+    desc: "Use your Lockyt credentials or Google sign-in to authenticate, then enter your master password to unlock.",
   },
   {
     step: "03",
     title: "Browse & Autofill",
-    desc: "Navigate to any login page — Lockora will detect the form and let you autofill your saved credentials instantly.",
+    desc: "Navigate to any login page — Lockyt will detect the form and let you autofill your saved credentials instantly.",
   },
 ];
 
@@ -64,7 +64,7 @@ export default function ExtensionPage() {
           </div>
 
           <h1 className="text-[28px] sm:text-[36px] lg:text-[42px] font-extrabold text-[#1a1a2e] leading-tight mb-4">
-            Lockora for{" "}
+            Lockyt for{" "}
             <span className="bg-gradient-to-r from-[#1a6b3c] to-[#22a050] bg-clip-text text-transparent">
               Chrome
             </span>
@@ -173,7 +173,7 @@ export default function ExtensionPage() {
             </span>
           </h2>
           <p className="text-[13px] text-[#6b7c6b] max-w-md mx-auto">
-            The Lockora extension brings the full power of your vault to
+            The Lockyt extension brings the full power of your vault to
             every tab.
           </p>
         </div>
@@ -245,7 +245,7 @@ export default function ExtensionPage() {
             Ready to supercharge your browser?
           </h2>
           <p className="text-[13px] text-[#6b7c6b] max-w-md mx-auto mb-6">
-            Install the Lockora extension and never manually type a password again.
+            Install the Lockyt extension and never manually type a password again.
           </p>
           <a
             href={CHROME_STORE_URL}

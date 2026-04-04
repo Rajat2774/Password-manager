@@ -3,16 +3,21 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Lockora</title>
+    <title>Lockyt</title>
     <link rel="stylesheet" href="popup.css" />
   </head>
+
   <body>
     <div id="app">
       <!-- ── Screen: Sign In ── -->
       <div id="screen-signin" class="screen hidden">
         <div class="header">
           <div class="brand">
-            <img src="../icons/logo.png" alt="Logo" style="height: 20px; width: auto; object-fit: contain;">
+            <img
+              src="../icons/logo.png"
+              alt="Logo"
+              style="height: 20px; width: auto; object-fit: contain"
+            />
           </div>
           <p class="header-sub">Sign in to your vault</p>
         </div>
@@ -138,7 +143,11 @@
       <div id="screen-unlock" class="screen hidden">
         <div class="header">
           <div class="brand">
-            <img src="../icons/logo.png" alt="Logo" style="height: 20px; width: auto; object-fit: contain;">
+            <img
+              src="../icons/logo.png"
+              alt="Logo"
+              style="height: 20px; width: auto; object-fit: contain"
+            />
           </div>
           <p class="header-sub" id="unlock-email">Re-enter master password</p>
         </div>
@@ -176,7 +185,6 @@
             </div>
           </div>
 
-          <!-- Confirm password (shown for new users) -->
           <div class="field hidden" id="confirm-field">
             <label>Confirm master password</label>
             <div class="input-wrap">
@@ -184,7 +192,6 @@
                 type="password"
                 id="input-unlock-confirm"
                 placeholder="••••••••"
-                required
               />
               <button
                 type="button"
@@ -260,7 +267,11 @@
       <div id="screen-vault" class="screen hidden">
         <div class="top-bar">
           <div class="brand small">
-            <img src="../icons/logo.png" alt="Logo" style="height: 16px; width: auto; object-fit: contain;">
+            <img
+              src="../icons/logo.png"
+              alt="Logo"
+              style="height: 16px; width: auto; object-fit: contain"
+            />
           </div>
           <button id="btn-signout" class="signout-btn" title="Sign out">
             <svg
@@ -329,7 +340,7 @@
 
         <!-- Open web app link -->
         <div class="footer">
-          <a id="open-webapp" class="webapp-link">Open Lockora vault →</a>
+          <a id="open-webapp" class="webapp-link">Open Lockyt vault →</a>
         </div>
       </div>
 
