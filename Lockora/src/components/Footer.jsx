@@ -1,4 +1,3 @@
-import { Link } from "react-router-dom";
 import logoImg from "../assets/logo.png";
 import { FaGithub, FaTwitter, FaLinkedin } from "react-icons/fa";
 
@@ -46,17 +45,17 @@ export default function Footer() {
             </h4>
             <ul className="space-y-3">
               {[
-                { label: "Features", to: "/#features" },
-                { label: "Security", to: "/#security" },
-                { label: "About", to: "/#about" },
-              ].map(({ label, to }) => (
+                { label: "Features", href: "#features" },
+                { label: "Security", href: "#security" },
+                { label: "About", href: "#about" },
+              ].map(({ label, href }) => (
                 <li key={label}>
-                  <Link
-                    to={to}
+                  <a
+                    href={href}
                     className="text-sm text-[#8a9a72] hover:text-[#1a6b3c] transition-colors duration-300"
                   >
                     {label}
-                  </Link>
+                  </a>
                 </li>
               ))}
             </ul>

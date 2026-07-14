@@ -51,7 +51,7 @@ function Hero() {
             Digital Life
           </span>
           <br />
-          <span className="text-[#1a1a2e]">with Lockora</span>
+          <span className="text-[#1a1a2e]">with Lockyt</span>
         </h1>
 
         {/* Subheading */}
@@ -112,7 +112,7 @@ function DashboardPreview() {
             </span>
           </h2>
           <p className="mt-4 text-[#6b7c6b] text-lg leading-relaxed">
-            Lockora brings military-grade security and effortless usability
+            Lockyt brings military-grade security and effortless usability
             together, so you can focus on what matters most.
           </p>
         </div>
@@ -221,7 +221,7 @@ const features = [
   {
     icon: RiShieldCheckLine,
     title: "End-to-End Encryption",
-    desc: "Your data is encrypted with AES-256 before it ever leaves your device. Zero-knowledge architecture ensures nobody — not even Lockora — can read your passwords.",
+    desc: "Your data is encrypted with AES-256 before it ever leaves your device. Zero-knowledge architecture ensures nobody — not even Lockyt — can read your passwords.",
   },
   {
     icon: RiDeviceLine,
@@ -344,7 +344,7 @@ function Security() {
               </span>
             </h2>
             <p className="text-[#6b7c6b] text-base sm:text-lg mb-8 sm:mb-10 leading-relaxed">
-              At Lockora, security isn't a feature — it's the foundation. Every
+              At Lockyt, security isn't a feature — it's the foundation. Every
               layer of our stack is designed so that trust is built into the
               math, not promises.
             </p>
@@ -413,7 +413,7 @@ function ChromeExtension() {
           {/* Left — content */}
           <div>
             <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#1a6b3c]/10 border border-[#1a6b3c]/20 text-[#1a6b3c] text-xs font-semibold mb-4 uppercase tracking-[0.12em]">
-              <svg width="11" height="11" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 14.5v-9l6 4.5-6 4.5z"/></svg>
+              <svg width="11" height="11" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 14.5v-9l6 4.5-6 4.5z" /></svg>
               Chrome Extension
             </span>
             <h2 className="text-2xl sm:text-4xl lg:text-[42px] font-bold text-[#1a1a2e] mb-4 leading-tight">
@@ -440,12 +440,12 @@ function ChromeExtension() {
 
             {/* Download button */}
             <a
-              href="https://github.com/Rajat2774/Password-manager"
+              href="https://chromewebstore.google.com/detail/ajocjlcopchcfcejaifjmgkhagkjalhm?utm_source=item-share-cb"
               target="_blank"
               rel="noopener noreferrer"
               className="group inline-flex items-center gap-3 px-7 py-3.5 bg-[#1a6b3c] hover:bg-[#145a31] text-white rounded-2xl font-semibold text-[14px] transition-all duration-300 hover:-translate-y-0.5 hover:shadow-xl hover:shadow-[#1a6b3c]/25"
             >
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 14.5v-9l6 4.5-6 4.5z"/></svg>
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 14.5v-9l6 4.5-6 4.5z" /></svg>
               <span>Get the Extension</span>
               <HiArrowRight className="group-hover:translate-x-1 transition-transform duration-300" />
             </a>
@@ -469,7 +469,7 @@ function ChromeExtension() {
                 <span className="text-base">🌐</span> github.com
               </div>
               {/* Credential rows */}
-              {[{site:"GitHub",user:"rajat@example.com"},{site:"Google",user:"raj.singh@gmail.com"}].map((c,i)=>(
+              {[{ site: "GitHub", user: "rajat@example.com" }, { site: "Google", user: "raj.singh@gmail.com" }].map((c, i) => (
                 <div key={i} className="flex items-center gap-3 px-4 py-3 border-b border-[#f0f2ed] last:border-0 hover:bg-[#f9faf7] transition-colors">
                   <div className="w-8 h-8 rounded-lg bg-[#1a6b3c]/10 flex items-center justify-center text-sm flex-shrink-0">🔑</div>
                   <div className="flex-1 min-w-0">
@@ -517,7 +517,7 @@ function CallToAction() {
               Ready to Take Control?
             </h2>
             <p className="text-[#6b7c6b] text-lg max-w-xl mx-auto mb-10 leading-relaxed">
-              Join thousands of users who trust Lockora with their digital
+              Join thousands of users who trust Lockyt with their digital
               security. Set up your encrypted vault in under a minute.
             </p>
 
@@ -525,7 +525,7 @@ function CallToAction() {
               to="/signin"
               className="group inline-flex items-center gap-2 px-10 py-4 text-base font-semibold text-white rounded-2xl bg-[#1a6b3c] hover:bg-[#145a31] transition-all duration-500 hover:shadow-2xl hover:shadow-[#1a6b3c]/20 hover:scale-105"
             >
-              <span>Start Using Lockora</span>
+              <span>Start Using Lockyt</span>
               <HiArrowRight className="group-hover:translate-x-1 transition-transform duration-300" />
             </Link>
           </div>
@@ -543,7 +543,7 @@ function About() {
 
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
         <span className="inline-block px-3 py-1 rounded-full bg-[#1a6b3c]/10 border border-[#1a6b3c]/20 text-[#1a6b3c] text-xs font-semibold mb-4 uppercase tracking-[0.12em]">
-          About Lockora
+          About Lockyt
         </span>
         <h2 className="text-2xl sm:text-4xl lg:text-[42px] font-bold text-[#1a1a2e] mb-4 sm:mb-6 leading-tight">
           Built by Security{" "}
@@ -552,7 +552,7 @@ function About() {
           </span>
         </h2>
         <p className="text-[#6b7c6b] text-lg leading-relaxed max-w-2xl mx-auto">
-          Lockora was born from a simple belief: everyone deserves effortless,
+          Lockyt was born from a simple belief: everyone deserves effortless,
           uncompromising security. We're a team of cryptography engineers and UX
           designers building a password manager that treats your privacy as
           non-negotiable. No ads, no trackers, no compromise.

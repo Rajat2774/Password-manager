@@ -5,7 +5,7 @@ import extNoform from "../../assets/extension/ext-noform.png";
 import { ShieldIcon } from "./Icons";
 
 const CHROME_STORE_URL =
-  "https://chromewebstore.google.com/detail/lockora/YOUR_EXTENSION_ID";
+  "https://chromewebstore.google.com/detail/ajocjlcopchcfcejaifjmgkhagkjalhm?utm_source=item-share-cb";
 
 const features = [
   {
@@ -16,7 +16,7 @@ const features = [
   {
     emoji: "💾",
     title: "Smart Save Prompts",
-    desc: "When you log in to a new site, Lockora prompts you to save the credentials securely to your encrypted vault.",
+    desc: "When you log in to a new site, Lockyt prompts you to save the credentials securely to your encrypted vault.",
   },
   {
     emoji: "🔒",
@@ -107,7 +107,7 @@ export default function ExtensionPage() {
           <div className="relative bg-white border border-[#e2e8e0] rounded-2xl p-2 shadow-2xl shadow-[#1a6b3c]/8 hover:shadow-[#1a6b3c]/15 transition-shadow duration-500">
             <img
               src={extSignin}
-              alt="Lockora Chrome Extension sign-in screen"
+              alt="Lockyt Chrome Extension sign-in screen"
               className="w-[260px] sm:w-[280px] rounded-xl"
             />
           </div>
